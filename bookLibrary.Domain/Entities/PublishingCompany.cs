@@ -1,8 +1,8 @@
 ﻿namespace bookLibrary.Domain.Entities
 {
-    public class Category : Entity
+    public class PublishingCompany : Entity
     {
-        public Category(string name)
+        public PublishingCompany(string name)
         {
             Name = name;
         }
