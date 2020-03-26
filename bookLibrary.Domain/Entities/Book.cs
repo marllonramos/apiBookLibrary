@@ -1,3 +1,5 @@
+using bookLibrary.Domain.Shared;
+
 namespace bookLibrary.Domain.Entities
 {
     public sealed class Book : Entity

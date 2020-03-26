@@ -1,4 +1,6 @@
-﻿namespace bookLibrary.Domain.Entities
+﻿using bookLibrary.Domain.Shared;
+
+namespace bookLibrary.Domain.Entities
 {
     public class Category : Entity
     {
