@@ -1,8 +1,9 @@
 using System;
+using Flunt.Notifications;
 
-namespace bookLibrary.Domain.Entities
+namespace bookLibrary.Domain.Shared
 {
-    public abstract class Entity
+    public abstract class Entity : Notifiable
     {
         public Entity()
         {

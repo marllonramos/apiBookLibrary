@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using bookLibrary.Domain.Shared;
 using bookLibrary.Domain.ValueObject;
 
 namespace bookLibrary.Domain.Entities
