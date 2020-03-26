@@ -1,4 +1,4 @@
-namespace bookLibrary.Domain.Commands.ReaderCommands
+namespace bookLibrary.Domain.Commands
 {
     public class ResultCommand : IResultCommand
     {
