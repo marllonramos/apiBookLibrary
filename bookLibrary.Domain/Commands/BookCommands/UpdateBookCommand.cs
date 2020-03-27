@@ -1,12 +1,15 @@
-using Flunt.Notifications;
+Ôªøusing Flunt.Notifications;
 using Flunt.Validations;
+using System;
 
 namespace bookLibrary.Domain.Commands.BookCommands
 {
-    public class CreateBookCommand : Notifiable, IValidatable, ICommand
+    public class UpdateBookCommand : Notifiable, IValidatable, ICommand
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public int Status { get; set; }
         public int PublishingCompanyId { get; set; }
         public int AuthorId { get; set; }
         public int CategoryId { get; set; }
@@ -15,9 +18,10 @@ namespace bookLibrary.Domain.Commands.BookCommands
         {
             AddNotifications(new Contract()
                 .Requires()
-                .IsNullOrEmpty(Title, "Title", "Informe o nome do leitor.")
-                .HasMinLen(Title, 3, "Title", "Informe um mÌnimo de 3 caracteres e um m·ximo de 50 para o livro.")
-                .HasMaxLen(Title, 50, "Title", "Informe um mÌnimo de 3 caracteres e um m·ximo de 50 para o livro.")
+                .IsNullOrEmpty(Title, "Title", "Informe o t√≠tulo do livro.")
+                .HasMinLen(Title, 3, "Title", "Informe um m√≠nimo de 3 caracteres e um m√°ximo de 50 para o livro.")
+                .HasMaxLen(Title, 50, "Title", "Informe um m√≠nimo de 3 caracteres e um m√°ximo de 50 para o livro.")
+                .AreNotEquals(Status, 0, "Status", "Informe o status do livro.")
                 .AreNotEquals(PublishingCompanyId, 0, "PublishingCompanyId", "Informe uma editora.")
                 .AreNotEquals(AuthorId, 0, "AuthorId", "Informe um autor.")
                 .AreNotEquals(CategoryId, 0, "CategoryId", "Informe uma categoria.")
