@@ -3,7 +3,7 @@ using Flunt.Notifications;
 
 namespace bookLibrary.Domain.Shared
 {
-    public abstract class Entity : Notifiable
+    public abstract class Entity
     {
         public Entity()
         {
