@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="1.0.4" />
+    <Compile Remove="ValueObject\**" />
+    <EmbeddedResource Remove="ValueObject\**" />
+    <None Remove="ValueObject\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ValueObject\" />
+    <PackageReference Include="Flunt" Version="1.0.4" />
   </ItemGroup>
 
 </Project>

@@ -16,7 +16,7 @@ namespace bookLibrary.Domain.Commands.AuthorCommands
                 new Contract()
                 .Requires()
                 .IsNotEmpty(Id, "Id", "Informe o id do autor.")
-                .IsNullOrEmpty(Name, "Name", "Informe o nome do autor.")
+                .IsNotNullOrEmpty(Name, "Name", "Informe o nome do autor.")
                 .HasMinLen(Name, 3, "Name", "Informe um mínimo de 3 caracteres e um máximo de 30 para o autor.")
                 .HasMaxLen(Name, 30, "Name", "Informe um mínimo de 3 caracteres e um máximo de 30 para o autor.")
             );
