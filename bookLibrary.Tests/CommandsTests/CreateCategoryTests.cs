@@ -1,16 +1,16 @@
-﻿using bookLibrary.Domain.Commands.PublishingCompanyCommands;
+﻿using bookLibrary.Domain.Commands.CategoryCommands;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace bookLibrary.Tests.CommandsTests
 {
     [TestClass]
-    [TestCategory("PublishingCompany - Tests")]
-    public class InsertPublishingCompanyTests
+    [TestCategory("Category - Tests")]
+    public class CreateCategoryTests
     {
         [TestMethod]
         public void Should_return_invalid_if_invalid_commands()
         {
-            var command = new CreatePublishingCompanyCommand()
+            var command = new CreateCategoryCommand()
             {
                 Name = ""
             };
@@ -18,15 +18,14 @@ namespace bookLibrary.Tests.CommandsTests
             command.Validate();
 
             Assert.IsTrue(command.Invalid);
-
         }
 
         [TestMethod]
         public void Should_return_valid_if_valid_commands()
         {
-            var command = new CreatePublishingCompanyCommand()
+            var command = new CreateCategoryCommand()
             {
-                Name = "Abril"
+                Name = "Suspense"
             };
 
             command.Validate();

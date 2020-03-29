@@ -1,16 +1,16 @@
-﻿using bookLibrary.Domain.Commands.CategoryCommands;
+﻿using bookLibrary.Domain.Commands.AuthorCommands;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace bookLibrary.Tests.CommandsTests
 {
     [TestClass]
-    [TestCategory("Category - Tests")]
-    public class InsertCategoryTests
+    [TestCategory("Author - Tests")]
+    public class CreateAuthorTests
     {
         [TestMethod]
         public void Should_return_invalid_if_invalid_commands()
         {
-            var command = new CreateCategoryCommand()
+            var command = new CreateAuthorCommand()
             {
                 Name = ""
             };
@@ -21,16 +21,17 @@ namespace bookLibrary.Tests.CommandsTests
         }
 
         [TestMethod]
-        public void Should_return_valid_if_valid_commands()
+        public void Should_return_invalid_if_valid_commands()
         {
-            var command = new CreateCategoryCommand()
+            var command = new CreateAuthorCommand()
             {
-                Name = "Suspense"
+                Name = "Laerte Silva"
             };
 
             command.Validate();
 
+
             Assert.IsTrue(command.Valid);
-        }
+        } 
     }
 }
