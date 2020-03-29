@@ -1,5 +1,6 @@
 using Flunt.Notifications;
 using Flunt.Validations;
+using System;
 
 namespace bookLibrary.Domain.Commands.BookCommands
 {
@@ -7,20 +8,21 @@ namespace bookLibrary.Domain.Commands.BookCommands
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public int PublishingCompanyId { get; set; }
-        public int AuthorId { get; set; }
-        public int CategoryId { get; set; }
+        public Guid PublishingCompanyId { get; set; }
+        public Guid AuthorId { get; set; }
+        public Guid CategoryId { get; set; }
 
         public void Validate()
         {
             AddNotifications(new Contract()
                 .Requires()
-                .IsNullOrEmpty(Title, "Title", "Informe o nome do leitor.")
+                .IsNotNullOrEmpty(Title, "Title", "Informe o nome do leitor.")
                 .HasMinLen(Title, 3, "Title", "Informe um mínimo de 3 caracteres e um máximo de 50 para o livro.")
                 .HasMaxLen(Title, 50, "Title", "Informe um mínimo de 3 caracteres e um máximo de 50 para o livro.")
-                .AreNotEquals(PublishingCompanyId, 0, "PublishingCompanyId", "Informe uma editora.")
-                .AreNotEquals(AuthorId, 0, "AuthorId", "Informe um autor.")
-                .AreNotEquals(CategoryId, 0, "CategoryId", "Informe uma categoria.")
+                .HasMaxLen(Description, 250, "Description", "Informe no máximo 250 caracteres para a descrição.")
+                .IsNotNullOrEmpty(PublishingCompanyId.ToString(), "PublishingCompanyId", "Informe uma editora.")
+                .IsNotNullOrEmpty(AuthorId.ToString(), "AuthorId", "Informe um autor.")
+                .IsNotNullOrEmpty(CategoryId.ToString(), "CategoryId", "Informe uma categoria.")
             );
         }
     }
