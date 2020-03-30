@@ -3,7 +3,7 @@ using System;
 
 namespace bookLibrary.Domain.Repositories
 {
-    public interface ReaderRepository
+    public interface IReaderRepository
     {
         Reader GetReader(Guid id);
         void CreateReader(Reader reader);
