@@ -7,8 +7,8 @@ namespace bookLibrary.Domain.Repositories
     {
         Book GetBook(Guid id);
         Book GetBookByReader(Guid id);
-        void CreateBook(Book book);
-        void UpdateBook(Book book);
-        void DeleteBook(Guid id);
+        void Create(Book book);
+        void Update(Book book);
+        void Delete(Guid id);
     }
 }

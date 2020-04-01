@@ -9,6 +9,11 @@ namespace bookLibrary.Domain.Entities
             Name = name;
         }
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
+        }
     }
 }

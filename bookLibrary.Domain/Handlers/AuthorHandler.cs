@@ -1,14 +1,18 @@
 using bookLibrary.Domain.Commands;
 using bookLibrary.Domain.Commands.AuthorCommands;
 using bookLibrary.Domain.Entities;
+using bookLibrary.Domain.Repositories;
 using Flunt.Notifications;
 
 namespace bookLibrary.Domain.Handlers
 {
     public class AuthorHandler : Notifiable, IHandler<CreateAuthorCommand>, IHandler<UpdateAuthorCommand>
     {
-        public AuthorHandler()
+        private readonly IAuthorRepository _authorRepository;
+
+        public AuthorHandler(IAuthorRepository authorRepository)
         {
+            authorRepository = _authorRepository;
         }
 
         public IResultCommand Handler(CreateAuthorCommand command)
@@ -20,7 +24,9 @@ namespace bookLibrary.Domain.Handlers
 
             Author author = new Author(command.Name);
 
-            //TODO: implementar repositório
+            // Autor não possui regras de negócio. Caso possuísse, chamaríamos ela aqui e adicionaríamos ao AddNotifications.
+
+            _authorRepository.Create(author);
 
             return new ResultCommand { Message = "Autor cadastrado com sucesso!", Success = true, Data = author };
         }
@@ -32,10 +38,12 @@ namespace bookLibrary.Domain.Handlers
             if (command.Invalid)
                 return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
 
-            //TODO: consultar autor e alterar os dados com os dados novos
-            // Author autor = repository.Get(command.Id);
+            Author author = _authorRepository.GetById(command.Id);
+            author.UpdateName(command.Name);
 
-            return new ResultCommand { Message = "Autor atualizado com sucesso!", Success = true, Data = new Author("") };
+            _authorRepository.Update(author);
+
+            return new ResultCommand { Message = "Autor atualizado com sucesso!", Success = true, Data = author };
         }
     }
 }

@@ -21,5 +21,30 @@ namespace bookLibrary.Domain.Entities
         public PublishingCompany PublishingCompany { get; private set; }
         public Author Author { get; private set; }
         public Category Category { get; private set; }
+
+        public void UpdateTitle(string title)
+        {
+            Title = title;
+        }
+        public void UpdateDescription(string description)
+        {
+            Description = description;
+        }
+        public void UpdateStatus(StatusBook status)
+        {
+            Status = status;
+        }
+        public void UpdatePublishingCompany(PublishingCompany publishingCompany)
+        {
+            PublishingCompany = publishingCompany;
+        }
+        public void UpdateAuthor(Author author)
+        {
+            Author = author;
+        }
+        public void UpdateCategory(Category category)
+        {
+            Category = category;
+        }
     }
 }
