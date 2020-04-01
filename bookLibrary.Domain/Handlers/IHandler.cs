@@ -4,6 +4,6 @@ namespace bookLibrary.Domain.Handlers
 {
     public interface IHandler<T> where T : ICommand
     {
-        IResultCommand Handler(ICommand T);
+        IResultCommand Handler(T command);
     }
 }
