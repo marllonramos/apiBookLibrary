@@ -13,13 +13,15 @@ namespace bookLibrary.Domain.Handlers
         private readonly IPublishingCompanyRepository _publishingCompanyRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IReaderRepository _readerRepository;
 
-        public BookHandler(IBookRepository bookRepository, IPublishingCompanyRepository publishingCompanyRepository, IAuthorRepository authorRepository, ICategoryRepository categoryRepository)
+        public BookHandler(IBookRepository bookRepository, IPublishingCompanyRepository publishingCompanyRepository, IAuthorRepository authorRepository, ICategoryRepository categoryRepository, IReaderRepository readerRepository)
         {
             _bookRepository = bookRepository;
             _publishingCompanyRepository = publishingCompanyRepository;
             _authorRepository = authorRepository;
             _categoryRepository = categoryRepository;
+            _readerRepository = readerRepository;
         }
 
         public IResultCommand Handler(CreateBookCommand command)
@@ -32,8 +34,9 @@ namespace bookLibrary.Domain.Handlers
             PublishingCompany company = _publishingCompanyRepository.GetById(command.PublishingCompanyId);
             Author author = _authorRepository.GetById(command.AuthorId);
             Category category = _categoryRepository.GetById(command.CategoryId);
+            Reader reader = _readerRepository.GetReader(command.ReaderId);
 
-            Book book = new Book(command.Title, command.Description, company, author, category);
+            Book book = new Book(command.Title, command.Description, company, author, category, reader);
 
             // Caso tivéssemos regras de negócio na entidade BOOK, teríamos a validação lá e aqui 
             // pegaríamos as notificações e atribuiríamos ao Handler
