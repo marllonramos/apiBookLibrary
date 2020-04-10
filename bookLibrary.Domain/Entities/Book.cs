@@ -5,7 +5,7 @@ namespace bookLibrary.Domain.Entities
 {
     public sealed class Book : Entity
     {
-        public Book(string title, string description, PublishingCompany publishingCompany, Author author, Category category)
+        public Book(string title, string description, PublishingCompany publishingCompany, Author author, Category category, Reader reader)
         {
             Title = title;
             Description = description;
@@ -13,6 +13,7 @@ namespace bookLibrary.Domain.Entities
             PublishingCompany = publishingCompany;
             Author = author;
             Category = category;
+            Reader = reader;
         }
 
         public string Title { get; private set; }
@@ -21,6 +22,7 @@ namespace bookLibrary.Domain.Entities
         public PublishingCompany PublishingCompany { get; private set; }
         public Author Author { get; private set; }
         public Category Category { get; private set; }
+        public Reader Reader { get; private set; }
 
         public void UpdateTitle(string title)
         {

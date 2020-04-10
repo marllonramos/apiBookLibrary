@@ -11,6 +11,7 @@ namespace bookLibrary.Domain.Commands.BookCommands
         public Guid PublishingCompanyId { get; set; }
         public Guid AuthorId { get; set; }
         public Guid CategoryId { get; set; }
+        public Guid ReaderId { get; set; }
 
         public void Validate()
         {
@@ -23,6 +24,7 @@ namespace bookLibrary.Domain.Commands.BookCommands
                 .IsNotNullOrEmpty(PublishingCompanyId.ToString(), "PublishingCompanyId", "Informe uma editora.")
                 .IsNotNullOrEmpty(AuthorId.ToString(), "AuthorId", "Informe um autor.")
                 .IsNotNullOrEmpty(CategoryId.ToString(), "CategoryId", "Informe uma categoria.")
+                .IsNotNullOrEmpty(ReaderId.ToString(), "ReaderId", "Informe um leitor.")
             );
         }
     }
