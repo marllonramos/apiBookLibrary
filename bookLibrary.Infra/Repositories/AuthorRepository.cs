@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Queries;
 using bookLibrary.Domain.Repositories;
@@ -17,36 +17,39 @@ namespace bookLibrary.Infra.Repositories
             _context = context;
         }
 
-        public void Create(Author author)
+        public async Task Create(Author author)
         {
             _context.Authors.Add(author);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Author author)
+        public async Task Update(Author author)
         {
             _context.Entry<Author>(author).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var author = _context.Authors.AsNoTracking().FirstOrDefault(AuthorQueries.GetById(id));
-            _context.Remove(author);
-            _context.SaveChanges();
-        }
-
-        public IEnumerable<Author> GetAll()
-        {
-            return _context.Authors
-                .AsNoTracking();
-        }
-
-        public Author GetById(Guid id)
-        {
-            return _context.Authors
+            var author = _context.Authors
                 .AsNoTracking()
-                .FirstOrDefault(AuthorQueries.GetById(id));
+                .FirstOrDefaultAsync(AuthorQueries.GetById(id));
+            _context.Remove(author);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Author>> GetAll()
+        {
+            return await _context.Authors
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<Author> GetById(Guid id)
+        {
+            return await _context.Authors
+                .AsNoTracking()
+                .FirstOrDefaultAsync(AuthorQueries.GetById(id));
         }        
     }
 }

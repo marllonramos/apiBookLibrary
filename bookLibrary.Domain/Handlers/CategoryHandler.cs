@@ -1,4 +1,5 @@
-﻿using bookLibrary.Domain.Commands;
+﻿using System.Threading.Tasks;
+using bookLibrary.Domain.Commands;
 using bookLibrary.Domain.Commands.CategoryCommands;
 using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Repositories;
@@ -18,7 +19,7 @@ namespace bookLibrary.Domain.Handlers
             _repository = repository;
         }
 
-        public IResultCommand Handler(CreateCategoryCommand command)
+        public async Task<IResultCommand> Handler(CreateCategoryCommand command)
         {
             command.Validate();
             ResultCommand result;
@@ -29,14 +30,14 @@ namespace bookLibrary.Domain.Handlers
             else
             {
                 var category = new Category(command.Name);
-                _repository.Create(category);
+                await _repository.Create(category);
                 result = new ResultCommand { Message = "Sucesso ao cadastrar categoria.", Success = true, Data = category };
             }
 
             return result;
         }
 
-        public IResultCommand Handler(UpdateCategoryCommand command)
+        public async Task<IResultCommand> Handler(UpdateCategoryCommand command)
         {
             command.Validate();
             ResultCommand result;
@@ -46,9 +47,10 @@ namespace bookLibrary.Domain.Handlers
             }
             else
             {
-                var category = _repository.GetById(command.Id);
+                // TODO: 2 awaits our result?
+                var category = _repository.GetById(command.Id).Result;
                 category.Update(command.Name);
-                _repository.Update(category);
+                await _repository.Update(category);
                 result = new ResultCommand() { Message = "Sucesso ao atualizar categoria.", Success = true, Data = category };
             }
 

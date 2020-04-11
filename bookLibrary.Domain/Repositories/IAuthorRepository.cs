@@ -1,15 +1,16 @@
 ﻿using bookLibrary.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace bookLibrary.Domain.Repositories
 {
     public interface IAuthorRepository
     {
-        IEnumerable<Author> GetAll();
-        Author GetById(Guid id);
-        void Create(Author author);
-        void Update(Author author);
-        void Delete(Guid id);
+        Task<IEnumerable<Author>> GetAll();
+        Task<Author> GetById(Guid id);
+        Task Create(Author author);
+        Task Update(Author author);
+        Task Delete(Guid id);
     }
 }
