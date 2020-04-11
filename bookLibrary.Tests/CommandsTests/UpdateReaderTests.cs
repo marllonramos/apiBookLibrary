@@ -17,14 +17,14 @@ namespace bookLibrary.Tests.CommandsTests
             _invalidCommand = new UpdateReaderCommand();
             _invalidCommand.Id = Guid.NewGuid();
             _invalidCommand.Name = "Mr";
-            _invalidCommand.Email = "87marllon";
+            //_invalidCommand.Email = "87marllon";
             _invalidCommand.Password = "123";
             #endregion
             #region _validCommand
             _validCommand = new UpdateReaderCommand();
             _validCommand.Id = Guid.NewGuid();
             _validCommand.Name = "Marllon Ramos";
-            _validCommand.Email = "87marllon@gmail.com";
+            //_validCommand.Email = "87marllon@gmail.com";
             _validCommand.Password = "12345";
             #endregion
         }
