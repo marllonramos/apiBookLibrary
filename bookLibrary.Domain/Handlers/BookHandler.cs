@@ -32,9 +32,9 @@ namespace bookLibrary.Domain.Handlers
             if (command.Invalid)
                 return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
 
-            PublishingCompany company = _publishingCompanyRepository.GetById(command.PublishingCompanyId);
-            Author author = _authorRepository.GetById(command.AuthorId);
-            Category category = _categoryRepository.GetById(command.CategoryId);
+            PublishingCompany company = await _publishingCompanyRepository.GetById(command.PublishingCompanyId);
+            Author author = await _authorRepository.GetById(command.AuthorId);
+            Category category = await _categoryRepository.GetById(command.CategoryId);
             Reader reader = await _readerRepository.GetReader(command.ReaderId);
 
             Book book = new Book(command.Title, command.Description, company, author, category, reader);
@@ -57,9 +57,9 @@ namespace bookLibrary.Domain.Handlers
             if (command.Invalid)
                 return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
 
-            PublishingCompany company = _publishingCompanyRepository.GetById(command.PublishingCompanyId);
-            Author author = _authorRepository.GetById(command.AuthorId);
-            Category category = _categoryRepository.GetById(command.CategoryId);
+            PublishingCompany company = await _publishingCompanyRepository.GetById(command.PublishingCompanyId);
+            Author author = await _authorRepository.GetById(command.AuthorId);
+            Category category = await _categoryRepository.GetById(command.CategoryId);
             Book book = await _bookRepository.GetBook(command.Id);
 
             book.UpdateTitle(command.Title);
