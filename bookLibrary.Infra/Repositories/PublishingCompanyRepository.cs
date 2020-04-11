@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Queries;
 using bookLibrary.Domain.Repositories;
@@ -18,37 +19,38 @@ namespace bookLibrary.Infra.Repositories
             _context = context;
         }
 
-        public void Create(PublishingCompany publishingCompany)
+        public async Task Create(PublishingCompany publishingCompany)
         {
             _context.PublishingCompanies.Add(publishingCompany);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(PublishingCompany publishingCompany)
+        public async Task Update(PublishingCompany publishingCompany)
         {
             _context.Entry<PublishingCompany>(publishingCompany).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            var publishingCompany = _context.PublishingCompanies
+            var publishingCompany = await _context.PublishingCompanies
                 .AsNoTracking()
-                .FirstOrDefault(PublishingCompanyQueries.GetById(id));
+                .FirstOrDefaultAsync(PublishingCompanyQueries.GetById(id));
             _context.Remove(publishingCompany);
         }
 
-        public IEnumerable<PublishingCompany> GetAll()
+        public async Task<IEnumerable<PublishingCompany>> GetAll()
         {
-            return _context.PublishingCompanies
-                .AsNoTracking();
+            return await _context.PublishingCompanies
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public PublishingCompany GetById(Guid id)
+        public async Task<PublishingCompany> GetById(Guid id)
         {
-            return _context.PublishingCompanies
+            return await _context.PublishingCompanies
                 .AsNoTracking()
-                .FirstOrDefault(PublishingCompanyQueries.GetById(id));
+                .FirstOrDefaultAsync(PublishingCompanyQueries.GetById(id));
         }        
     }
 }

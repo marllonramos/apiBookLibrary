@@ -3,6 +3,7 @@ using bookLibrary.Domain.Commands.PublishingCompanyCommands;
 using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Repositories;
 using Flunt.Notifications;
+using System.Threading.Tasks;
 
 namespace bookLibrary.Domain.Handlers
 {
@@ -17,7 +18,7 @@ namespace bookLibrary.Domain.Handlers
             _repository = repository;
         }
 
-        public IResultCommand Handler(CreatePublishingCompanyCommand command)
+        public async Task<IResultCommand> Handler(CreatePublishingCompanyCommand command)
         {
             command.Validate();
             ResultCommand result;
@@ -28,14 +29,14 @@ namespace bookLibrary.Domain.Handlers
             else
             {
                 var publishingCompany = new PublishingCompany(command.Name);
-                _repository.Create(publishingCompany);
+                await _repository.Create(publishingCompany);
                 result = new ResultCommand { Message = "Sucesso ao cadastrar editora.", Success = true, Data = publishingCompany };
             }
 
             return result;
         }
 
-        public IResultCommand Handler(UpdatePublishingCompanyCommand command)
+        public async Task<IResultCommand> Handler(UpdatePublishingCompanyCommand command)
         {
             command.Validate();
             ResultCommand result;
@@ -45,9 +46,10 @@ namespace bookLibrary.Domain.Handlers
             }
             else
             {
-                var publishingCompany = _repository.GetById(command.Id);
+                // TODO: 2 awaits our result?
+                var publishingCompany = _repository.GetById(command.Id).Result;
                 publishingCompany.Update(command.Name);
-                _repository.Update(publishingCompany);
+                await _repository.Update(publishingCompany);
                 result = new ResultCommand() { Message = "Sucesso ao atualizar editora.", Success = true, Data = publishingCompany };
             }
 

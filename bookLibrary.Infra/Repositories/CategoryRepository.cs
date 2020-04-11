@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Queries;
 using bookLibrary.Domain.Repositories;
@@ -17,36 +18,37 @@ namespace bookLibrary.Infra.Repositories
             _context = context;
         }
 
-        public void Create(Category category)
+        public async Task Create(Category category)
         {
             _context.Categories.Add(category);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(Category category)
+        public async Task Update(Category category)
         {
             _context.Entry<Category>(category).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
             var category = _context.Categories.AsNoTracking().FirstOrDefault(CategoryQueries.GetById(id));
             _context.Remove(category);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Category> GetAll()
+        public async Task<IEnumerable<Category>> GetAll()
         {
-            return _context.Categories
-                .AsNoTracking();
-        }
-
-        public Category GetById(Guid id)
-        {
-            return _context.Categories
+            return await _context.Categories
                 .AsNoTracking()
-                .FirstOrDefault(CategoryQueries.GetById(id));                
+                .ToListAsync();
+        }
+
+        public async Task<Category> GetById(Guid id)
+        {
+            return await _context.Categories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(CategoryQueries.GetById(id));                
         }        
     }
 }

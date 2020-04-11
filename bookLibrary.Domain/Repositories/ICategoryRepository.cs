@@ -1,15 +1,16 @@
 ﻿using bookLibrary.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace bookLibrary.Domain.Repositories
 {
     public interface ICategoryRepository
     {
-        IEnumerable<Category> GetAll();
-        Category GetById(Guid id);
-        void Create(Category category);
-        void Update(Category category);
-        void Delete(Guid id);
+        Task<IEnumerable<Category>> GetAll();
+        Task<Category> GetById(Guid id);
+        Task Create(Category category);
+        Task Update(Category category);
+        Task Delete(Guid id);
     }
 }
