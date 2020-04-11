@@ -1,5 +1,6 @@
 using bookLibrary.Domain.Enums;
 using bookLibrary.Domain.Shared;
+using System;
 
 namespace bookLibrary.Domain.Entities
 {
@@ -22,6 +23,7 @@ namespace bookLibrary.Domain.Entities
         public PublishingCompany PublishingCompany { get; private set; }
         public Author Author { get; private set; }
         public Category Category { get; private set; }
+        public Guid ReaderId { get; private set; }
         public Reader Reader { get; private set; }
 
         public void UpdateTitle(string title)

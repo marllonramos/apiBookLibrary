@@ -4,6 +4,7 @@ using bookLibrary.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace bookLibrary.Infra.Repositories
 {
@@ -16,31 +17,31 @@ namespace bookLibrary.Infra.Repositories
             _context = context;
         }
 
-        public void CreateReader(Reader reader)
+        public async Task CreateReader(Reader reader)
         {
             _context.Readers.Add(reader);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteReader(Guid id)
+        public async Task DeleteReader(Guid id)
         {
-            Reader reader = GetReader(id);
+            Reader reader = await GetReader(id);
 
             _context.Readers.Remove(reader);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Reader GetReader(Guid id)
+        public async Task<Reader> GetReader(Guid id)
         {
-            return _context.Readers
+            return await _context.Readers
                 .Where(x => x.Id == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
-        public void UpdateReader(Reader reader)
+        public async Task UpdateReader(Reader reader)
         {
             _context.Entry<Reader>(reader).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

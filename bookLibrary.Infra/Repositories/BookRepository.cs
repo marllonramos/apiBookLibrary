@@ -1,10 +1,12 @@
 ﻿using bookLibrary.Domain.Entities;
+using bookLibrary.Domain.Queries;
 using bookLibrary.Domain.Repositories;
 using bookLibrary.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace bookLibrary.Infra.Repositories
 {
@@ -17,39 +19,63 @@ namespace bookLibrary.Infra.Repositories
             _context = context;
         }
 
-        public void Create(Book book)
+        public async Task Create(Book book)
         {
             _context.Books.Add(book);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Guid id)
+        public async Task Delete(Guid id)
         {
-            Book book = GetBook(id);
+            Book book = await GetBook(id);
 
             _context.Books.Remove(book);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Book GetBook(Guid id)
+        public async Task<Book> GetBook(Guid id)
         {
-            return _context.Books
+            return await _context.Books
                 .Where(x => x.Id == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
         }
 
-        public IEnumerable<Book> GetBookByReader(Guid id)
+        public async Task<IEnumerable<Book>> GetBookByReader(Guid id)
         {
-            return _context.Books
-                .Where(x => x.Reader.Id == id)
+            return await _context.Books
+                .Where(BookQueries.GetBookByReader(id))
                 .AsNoTracking()
-                .ToList();
+                .ToListAsync();
         }
 
-        public void Update(Book book)
+        public async Task<IEnumerable<Book>> GetBookByAuthor(Guid id)
+        {
+            return await _context.Books
+                .Where(BookQueries.GetBookByAuthor(id))
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Book>> GetBookByPublishingCompany(Guid id)
+        {
+            return await _context.Books
+                .Where(BookQueries.GetBookByPublishingCompany(id))
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Book>> GetBookByCategory(Guid id)
+        {
+            return await _context.Books
+                .Where(BookQueries.GetBookByCategory(id))
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task Update(Book book)
         {
             _context.Entry<Book>(book).State = EntityState.Modified;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
