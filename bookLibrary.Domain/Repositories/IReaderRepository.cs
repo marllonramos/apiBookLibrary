@@ -1,13 +1,14 @@
 ﻿using bookLibrary.Domain.Entities;
 using System;
+using System.Threading.Tasks;
 
 namespace bookLibrary.Domain.Repositories
 {
     public interface IReaderRepository
     {
-        Reader GetReader(Guid id);
-        void CreateReader(Reader reader);
-        void UpdateReader(Reader reader);
-        void DeleteReader(Guid id);
+        Task<Reader> GetReader(Guid id);
+        Task CreateReader(Reader reader);
+        Task UpdateReader(Reader reader);
+        Task DeleteReader(Guid id);
     }
 }

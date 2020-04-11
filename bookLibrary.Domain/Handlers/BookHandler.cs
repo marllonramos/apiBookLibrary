@@ -4,6 +4,7 @@ using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Enums;
 using bookLibrary.Domain.Repositories;
 using Flunt.Notifications;
+using System.Threading.Tasks;
 
 namespace bookLibrary.Domain.Handlers
 {
@@ -24,7 +25,7 @@ namespace bookLibrary.Domain.Handlers
             _readerRepository = readerRepository;
         }
 
-        public IResultCommand Handler(CreateBookCommand command)
+        public async Task<IResultCommand> Handler(CreateBookCommand command)
         {
             command.Validate();
 
@@ -34,7 +35,7 @@ namespace bookLibrary.Domain.Handlers
             PublishingCompany company = _publishingCompanyRepository.GetById(command.PublishingCompanyId);
             Author author = _authorRepository.GetById(command.AuthorId);
             Category category = _categoryRepository.GetById(command.CategoryId);
-            Reader reader = _readerRepository.GetReader(command.ReaderId);
+            Reader reader = await _readerRepository.GetReader(command.ReaderId);
 
             Book book = new Book(command.Title, command.Description, company, author, category, reader);
 
@@ -44,12 +45,12 @@ namespace bookLibrary.Domain.Handlers
             //if (Invalid)
             //    return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = Notifications };
 
-            _bookRepository.Create(book);
+            await _bookRepository.Create(book);
 
             return new ResultCommand { Message = "Livro cadastrado com sucesso!", Success = true, Data = book };
         }
 
-        public IResultCommand Handler(UpdateBookCommand command)
+        public async Task<IResultCommand> Handler(UpdateBookCommand command)
         {
             command.Validate();
 
@@ -59,7 +60,7 @@ namespace bookLibrary.Domain.Handlers
             PublishingCompany company = _publishingCompanyRepository.GetById(command.PublishingCompanyId);
             Author author = _authorRepository.GetById(command.AuthorId);
             Category category = _categoryRepository.GetById(command.CategoryId);
-            Book book = _bookRepository.GetBook(command.Id);
+            Book book = await _bookRepository.GetBook(command.Id);
 
             book.UpdateTitle(command.Title);
             book.UpdateDescription(command.Description);
@@ -74,7 +75,7 @@ namespace bookLibrary.Domain.Handlers
             //if (Invalid)
             //    return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = Notifications };
 
-            _bookRepository.Update(book);
+            await _bookRepository.Update(book);
 
             return new ResultCommand { Message = "Livro atualizado com sucesso!", Success = true, Data = book };
         }

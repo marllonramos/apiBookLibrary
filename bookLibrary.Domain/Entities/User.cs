@@ -24,5 +24,15 @@ namespace bookLibrary.Domain.Entities
 
             return existEmail;
         }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
+        }
+
+        public void UpdatePassword(string password)
+        {
+            Password = password;
+        }
     }
 }
