@@ -1,3 +1,4 @@
+using bookLibrary.Domain.Commands;
 using bookLibrary.Domain.Handlers;
 using bookLibrary.Domain.Repositories;
 using bookLibrary.Infra.Contexts;
@@ -26,16 +27,28 @@ namespace bookLibrary.API
             services.AddCors();
 
             services.AddControllers();
+          
+           //2. Conexão com 'InMemory'                     
+           //services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
 
-            //2. Conex�o com 'InMemory'
-            services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
-
+            //5. Adicionando injeção de dependência
+            services.AddScoped<IResultCommand, ResultCommand>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IReaderRepository, ReaderRepository>();
+            services.AddScoped<IPublishingCompanyRepository, PublishingCompanyRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<BookHandler, BookHandler>();
+            services.AddScoped<ReaderHandler, ReaderHandler>();
             services.AddScoped<CategoryHandler, CategoryHandler>();
             services.AddScoped<AuthorHandler, AuthorHandler>();
             services.AddScoped<PublishingCompanyHandler, PublishingCompanyHandler>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<IAuthorRepository, AuthorRepository>();
-            services.AddScoped<IPublishingCompanyRepository, PublishingCompanyRepository>();
+
+            //6. Conexao com SqlServer
+            services.AddDbContext<DbBookContext>(
+                opt => opt.UseSqlServer(
+                    Configuration.GetConnectionString("connectionString")
+                ));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -57,7 +70,7 @@ namespace bookLibrary.API
             );
 
             app.UseAuthorization();
-            //4. Habilitei o uso da autoriza��o
+            //4. Habilitei o uso da autorização
             //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

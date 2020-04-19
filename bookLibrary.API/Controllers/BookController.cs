@@ -17,41 +17,68 @@ namespace bookLibrary.API.Controllers
         private readonly BookHandler _bookHandler;
         private readonly IBookRepository _bookRepository;
 
-        public BookController(BookHandler bookHandler)
+        public BookController(BookHandler bookHandler, IBookRepository bookRepository)
         {
             _bookHandler = bookHandler;
+            _bookRepository = bookRepository;
         }
 
         [HttpPost]
         [Route("")]
         public async Task<IResultCommand> Post([FromBody]CreateBookCommand command)
         {
-            return await _bookHandler.Handler(command);
+            try
+            {
+                return await _bookHandler.Handler(command);
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Erro ao cadastrar Livro.", Success = false, Data = ex.Message };
+            }
         }
 
         [HttpPut]
         [Route("")]
         public async Task<IResultCommand> Put([FromBody]UpdateBookCommand command)
         {
-            return await _bookHandler.Handler(command);
+            try
+            {
+                return await _bookHandler.Handler(command);
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Erro ao atualizar Livro.", Success = false, Data = ex.Message };
+            }
         }
 
         [HttpGet]
         [Route("by-author/{id:Guid}")]
         public async Task<IResultCommand> GetByAuthor(Guid id)
         {
-            IEnumerable<Book> books = await _bookRepository.GetBookByAuthor(id);
-
-            return new ResultCommand { Message = "", Success = true, Data = books };
+            try
+            {
+                IEnumerable<Book> books = await _bookRepository.GetBookByAuthor(id);
+                return new ResultCommand { Message = "", Success = true, Data = books };
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Erro ao consultar Livro.", Success = false, Data = ex.Message };
+            }
         }
 
         [HttpDelete]
         [Route("{id:Guid}")]
         public async Task<IResultCommand> Delete(Guid id)
         {
-            await _bookRepository.Delete(id);
-
-            return new ResultCommand { Message = "Livro excluído com sucesso!", Success = true, Data = null };
+            try
+            {
+                await _bookRepository.Delete(id);
+                return new ResultCommand { Message = "Livro excluído com sucesso!", Success = true, Data = null };
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Erro ao excluir Livro.", Success = false, Data = ex.Message };
+            }
         }
     }
 }
