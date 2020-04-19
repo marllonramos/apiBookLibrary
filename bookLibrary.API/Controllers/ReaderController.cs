@@ -26,32 +26,58 @@ namespace bookLibrary.API.Controllers
         [Route("")]
         public async Task<IResultCommand> Post([FromBody]CreateReaderCommand command)
         {
-            return await _readerHandler.Handler(command);
+            try
+            {
+                return await _readerHandler.Handler(command);
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Ocorreu um erro ao inserir o Leitor", Success = false, Data = ex.Message };
+            }
         }
 
         [HttpPut]
         [Route("")]
         public async Task<IResultCommand> Put([FromBody]UpdateReaderCommand command)
         {
-            return await _readerHandler.Handler(command);
+            try
+            {
+                return await _readerHandler.Handler(command);
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Ocorreu um erro na atualização do Leitor.", Success = false, Data = ex.Message };
+            }
         }
 
         [HttpGet]
-        [Route("{id:Guid}")]
+        [Route("by-id/{id:Guid}")]
         public async Task<IResultCommand> Get(Guid id)
         {
-            Reader reader = await _readerRepository.GetReader(id);
-
-            return new ResultCommand { Message = "", Success = true, Data = reader };
+            try
+            {
+                Reader reader = await _readerRepository.GetReader(id);
+                return new ResultCommand { Message = "", Success = true, Data = reader };
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Ocorreu um erro na consulta ao Leitor.", Success = true, Data = ex.Message };
+            }
         }
 
         [HttpDelete]
-        [Route("")]
+        [Route("{id:Guid}")]
         public async Task<IResultCommand> Delete(Guid id)
         {
-            await _readerRepository.DeleteReader(id);
-
-            return new ResultCommand { Message = "Leitor excluído com sucesso!", Success = true, Data = null };
+            try
+            {
+                await _readerRepository.DeleteReader(id);
+                return new ResultCommand { Message = "Leitor excluído com sucesso!", Success = true, Data = null };
+            }
+            catch (Exception ex)
+            {
+                return new ResultCommand { Message = "Ocorreu um erro ao excluir o Leitor!", Success = false, Data = ex.Message };
+            }
         }
     }
 }
