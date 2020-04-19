@@ -67,9 +67,10 @@ namespace bookLibrary.API.Controllers
 
 
         [HttpDelete]
+        [Route("{id}")]
         public async Task<IResultCommand> Delete
         (
-            [FromBody] Guid id
+            Guid id
         )
         {
             try
@@ -118,7 +119,7 @@ namespace bookLibrary.API.Controllers
         [Route("id")]
         public async Task<IResultCommand> GetById
         (
-            [FromQuery] Guid id
+           [FromQuery] Guid id
         )
         {
             try

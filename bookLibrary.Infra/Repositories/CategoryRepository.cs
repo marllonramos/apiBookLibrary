@@ -32,7 +32,7 @@ namespace bookLibrary.Infra.Repositories
 
         public async Task Delete(Guid id)
         {
-            var category = _context.Categories.AsNoTracking().FirstOrDefault(CategoryQueries.GetById(id));
+            var category = await _context.Categories.AsNoTracking().FirstOrDefaultAsync(CategoryQueries.GetById(id));
             _context.Remove(category);
             await _context.SaveChangesAsync();
         }

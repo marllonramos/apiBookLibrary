@@ -37,6 +37,7 @@ namespace bookLibrary.Infra.Repositories
                 .AsNoTracking()
                 .FirstOrDefaultAsync(PublishingCompanyQueries.GetById(id));
             _context.Remove(publishingCompany);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<PublishingCompany>> GetAll()

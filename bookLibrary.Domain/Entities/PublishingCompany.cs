@@ -4,6 +4,11 @@ namespace bookLibrary.Domain.Entities
 {
     public class PublishingCompany : Entity
     {
+        public PublishingCompany()
+        {
+
+        }
+
         public PublishingCompany(string name)
         {
             Name = name;
