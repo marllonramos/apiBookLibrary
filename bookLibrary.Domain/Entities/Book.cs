@@ -6,6 +6,7 @@ namespace bookLibrary.Domain.Entities
 {
     public sealed class Book : Entity
     {
+        protected Book(){}
         public Book(string title, string description, PublishingCompany publishingCompany, Author author, Category category, Reader reader)
         {
             Title = title;

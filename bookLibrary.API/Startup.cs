@@ -1,4 +1,8 @@
+using bookLibrary.Domain.Commands;
+using bookLibrary.Domain.Handlers;
+using bookLibrary.Domain.Repositories;
 using bookLibrary.Infra.Contexts;
+using bookLibrary.Infra.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -24,8 +28,24 @@ namespace bookLibrary.API
 
             services.AddControllers();
 
+            //3. Adicionando injeção de dependência
+            services.AddScoped<IResultCommand, ResultCommand>();
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IReaderRepository, ReaderRepository>();
+            services.AddScoped<IPublishingCompanyRepository, PublishingCompanyRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IAuthorRepository, AuthorRepository>();
+            services.AddScoped<BookHandler, BookHandler>();
+            services.AddScoped<ReaderHandler, ReaderHandler>();
+
             //2. Conexão com 'InMemory'
-            services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
+            //services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
+
+            //4. Conexao com SqlServer
+            services.AddDbContext<DbBookContext>(
+                opt => opt.UseSqlServer(
+                    Configuration.GetConnectionString("connectionString")
+                ));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -2,8 +2,10 @@ using bookLibrary.Domain.Shared;
 
 namespace bookLibrary.Domain.Entities
 {
-    public abstract class User: Entity
+    public abstract class User : Entity
     {
+        protected User() { }
+
         protected User(string name, string email, string password)
         {
             Name = name;
