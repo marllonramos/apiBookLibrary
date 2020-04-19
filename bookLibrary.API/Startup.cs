@@ -27,8 +27,11 @@ namespace bookLibrary.API
             services.AddCors();
 
             services.AddControllers();
+          
+           //2. ConexÃ£o com 'InMemory'                     
+           //services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
 
-            //3. Adicionando injeção de dependência
+            //5. Adicionando injeÃ§Ã£o de dependÃªncia
             services.AddScoped<IResultCommand, ResultCommand>();
             services.AddScoped<IBookRepository, BookRepository>();
             services.AddScoped<IReaderRepository, ReaderRepository>();
@@ -37,11 +40,11 @@ namespace bookLibrary.API
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<BookHandler, BookHandler>();
             services.AddScoped<ReaderHandler, ReaderHandler>();
+            services.AddScoped<CategoryHandler, CategoryHandler>();
+            services.AddScoped<AuthorHandler, AuthorHandler>();
+            services.AddScoped<PublishingCompanyHandler, PublishingCompanyHandler>();
 
-            //2. Conexão com 'InMemory'
-            //services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
-
-            //4. Conexao com SqlServer
+            //6. Conexao com SqlServer
             services.AddDbContext<DbBookContext>(
                 opt => opt.UseSqlServer(
                     Configuration.GetConnectionString("connectionString")
@@ -67,7 +70,7 @@ namespace bookLibrary.API
             );
 
             app.UseAuthorization();
-            //4. Habilitei o uso da autorização
+            //4. Habilitei o uso da autorizaÃ§Ã£o
             //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

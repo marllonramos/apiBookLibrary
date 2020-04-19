@@ -31,7 +31,7 @@ namespace bookLibrary.Infra.Repositories
 
         public async Task Delete(Guid id)
         {
-            var author = _context.Authors
+            var author = await _context.Authors
                 .AsNoTracking()
                 .FirstOrDefaultAsync(AuthorQueries.GetById(id));
             _context.Remove(author);
