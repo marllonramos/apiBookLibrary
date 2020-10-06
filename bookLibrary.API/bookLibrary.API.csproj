@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\bookLibrary.Infra\bookLibrary.Infra.csproj" />
+    <ProjectReference Include="..\bookLibrary.Domain\bookLibrary.Domain.csproj" />
   </ItemGroup>
 
 </Project>
