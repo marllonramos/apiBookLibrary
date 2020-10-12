@@ -7,11 +7,6 @@ namespace bookLibrary.Domain.Entities
     {
         private readonly IList<Book> _books;
 
-        protected Reader()
-        {
-            _books = new List<Book>();
-        }
-
         public Reader(string name, string email, string password)
             : base(name, email, password)
         {

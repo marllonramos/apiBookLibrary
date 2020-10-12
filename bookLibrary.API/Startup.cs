@@ -1,6 +1,7 @@
 using bookLibrary.Domain.Commands;
 using bookLibrary.Domain.Handlers;
 using bookLibrary.Domain.Repositories;
+using bookLibrary.Domain.Shared;
 using bookLibrary.Infra.Contexts;
 using bookLibrary.Infra.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -43,12 +44,16 @@ namespace bookLibrary.API
             services.AddScoped<CategoryHandler, CategoryHandler>();
             services.AddScoped<AuthorHandler, AuthorHandler>();
             services.AddScoped<PublishingCompanyHandler, PublishingCompanyHandler>();
+            services.AddScoped<DbSqlAdoContext, DbSqlAdoContext>();
 
-            //6. Conexao com SqlServer
+            //6. Conexao com SqlServer(usando para Entity Framework)
             services.AddDbContext<DbBookContext>(
                 opt => opt.UseSqlServer(
                     Configuration.GetConnectionString("connectionString")
                 ));
+
+            //6. Conexao com SqlServer(usando para ADO.Net)
+            Settings.ConnectionString = Configuration.GetConnectionString("connectionString");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
