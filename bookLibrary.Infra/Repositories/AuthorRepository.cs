@@ -46,8 +46,22 @@ namespace bookLibrary.Infra.Repositories
 
         public async Task Update(Author author)
         {
-            // _context.Entry<Author>(author).State = EntityState.Modified;
-            // await _context.SaveChangesAsync();
+            try
+            {
+                string query = "UPDATE autor SET nome = @nome WHERE ID = @id";
+
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@id", author.Id),
+                    new SqlParameter("@nome", author.Name)
+                };
+
+                _contextAdo.ExecutarComando(CommandType.Text, query, parameters);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task Delete(Guid id)
@@ -69,10 +83,32 @@ namespace bookLibrary.Infra.Repositories
 
         public async Task<Author> GetById(Guid id)
         {
-            return new Author("");
-            // return await _context.Authors
-            //     .AsNoTracking()
-            //     .FirstOrDefaultAsync(AuthorQueries.GetById(id));
-        }        
+            try
+            {
+                Author author = null;
+
+                string query = "SELECT id, nome FROM autor WHERE Id = @id";
+
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("@id", id)
+                };
+
+                using (var result = _contextAdo.ExecutarConsulta(CommandType.Text, query, parameters))
+                {
+                    while (result.Read())
+                    {
+                        author = new Author(result[1].ToString());
+                        author.FillIdAuthor(result[0].ToString());
+                    }
+                }
+
+                return author;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

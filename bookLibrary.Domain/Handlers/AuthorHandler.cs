@@ -39,21 +39,19 @@ namespace bookLibrary.Domain.Handlers
         public async Task<IResultCommand> Handler(UpdateAuthorCommand command)
         {
             command.Validate();
-            ResultCommand result;
             if (command.Invalid)
-            {
-                result = new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
-            }
-            else
-            {
-                // TODO: 2 awaits our result?
-                var author = _authorRepository.GetById(command.Id).Result;
-                author.UpdateName(command.Name);
-                await _authorRepository.Update(author);
-                result = new ResultCommand { Message = "Autor atualizado com sucesso!", Success = true, Data = author };
-            }
+                return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
 
-            return result;
+            // TODO: 2 awaits our result?
+            var author = _authorRepository.GetById(command.Id).Result;
+
+            if(author == null)
+                return new ResultCommand { Message = "Não foi possível encontrar o autor.", Success = false, Data = command.Notifications };
+                
+            author.UpdateName(command.Name);
+            await _authorRepository.Update(author);
+
+            return new ResultCommand { Message = "Autor atualizado com sucesso!", Success = true, Data = author };
         }
     }
 }

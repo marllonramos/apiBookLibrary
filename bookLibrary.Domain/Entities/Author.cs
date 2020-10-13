@@ -1,4 +1,5 @@
-﻿using bookLibrary.Domain.Shared;
+﻿using System;
+using bookLibrary.Domain.Shared;
 
 namespace bookLibrary.Domain.Entities
 {
@@ -14,6 +15,11 @@ namespace bookLibrary.Domain.Entities
         public void UpdateName(string name)
         {
             Name = name;
+        }
+
+        public void FillIdAuthor(string id)
+        {
+            Id = Guid.Parse(id);
         }
     }
 }

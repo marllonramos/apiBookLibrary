@@ -10,6 +10,6 @@ namespace bookLibrary.Domain.Shared
             Id = Guid.NewGuid();
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; protected set; }
     }
 }

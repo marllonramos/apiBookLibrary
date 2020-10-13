@@ -26,42 +26,47 @@ namespace bookLibrary.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IResultCommand> Post
+        public async Task<ActionResult<IResultCommand>> Post
         (
            [FromBody] CreateAuthorCommand command
         )
         {
             try
             {
-                return await _handler.Handler(command);
+                var result = await _handler.Handler(command);
+                if (result != null)
+                    return Ok(result);
+
+                return NotFound(result);
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IResultCommand> Put
+        public async Task<ActionResult<IResultCommand>> Put
         (
             [FromBody] UpdateAuthorCommand command
         )
         {
             try
             {
-                return await _handler.Handler(command);
+                var result = await _handler.Handler(command);
+                if (result != null)
+                    return Ok(result);
+
+                return NotFound(result);
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
+                return BadRequest(new
                 {
-                    Message = ex.Message,
-                    Success = false
-                };
+                    message = "Ocorreu um erro! Fale com o Administrador.", 
+                    success = false, 
+                    data = ex.Message
+                });
             }
         }
 

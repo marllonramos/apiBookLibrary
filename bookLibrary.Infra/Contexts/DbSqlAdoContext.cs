@@ -44,5 +44,34 @@ namespace bookLibrary.Infra.Contexts
             }
         }
         #endregion
+
+        #region Queries para consulta de dados
+        public SqlDataReader ExecutarConsulta(CommandType commandType, string commandText, params SqlParameter[] parameters)
+        {
+            SqlConnection conn = new SqlConnection(connString);
+
+            try
+            {
+                conn.Open();
+                return ExecutarConsultaDataReader(conn, commandType, commandText, parameters);
+            }
+            catch
+            {
+                conn.Close();
+                throw;
+            }
+        }
+
+        private SqlDataReader ExecutarConsultaDataReader(SqlConnection connection, CommandType commandType, string commandText, SqlParameter[] parameters)
+        {
+            SqlCommand command = new SqlCommand(commandText, connection);
+            PrepararComando(connection, command, commandType, commandText, parameters);
+
+            SqlDataReader dataReader = command.ExecuteReader();
+            command.Parameters.Clear();
+
+            return dataReader;
+        }
+        #endregion
     }
 }
