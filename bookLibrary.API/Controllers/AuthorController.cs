@@ -15,21 +15,14 @@ namespace bookLibrary.API.Controllers
         private readonly IAuthorRepository _repository;
         private readonly AuthorHandler _handler;
 
-        public AuthorController
-        (
-            IAuthorRepository repository,
-            AuthorHandler handler
-        )
+        public AuthorController(IAuthorRepository repository, AuthorHandler handler)
         {
             _repository = repository;
             _handler = handler;
         }
 
         [HttpPost]
-        public async Task<ActionResult<IResultCommand>> Post
-        (
-           [FromBody] CreateAuthorCommand command
-        )
+        public async Task<ActionResult<IResultCommand>> Post([FromBody] CreateAuthorCommand command)
         {
             try
             {
@@ -46,10 +39,7 @@ namespace bookLibrary.API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<IResultCommand>> Put
-        (
-            [FromBody] UpdateAuthorCommand command
-        )
+        public async Task<ActionResult<IResultCommand>> Put([FromBody] UpdateAuthorCommand command)
         {
             try
             {
@@ -73,37 +63,35 @@ namespace bookLibrary.API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IResultCommand> Delete
-        (
-            Guid id
-        )
+        public async Task<ActionResult<IResultCommand>> Delete(Guid id)
         {
             try
             {
                 await _repository.Delete(id);
-                return new ResultCommand()
+                return Ok(new 
                 {
-                    Message = "Autor(a) excluído(a) com sucesso.",
-                    Success = true
-                };
+                    message = "Autor(a) excluído(a) com sucesso.",
+                    success = true
+                });
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
+                return BadRequest(new
                 {
-                    Message = ex.Message,
-                    Success = false
-                };
+                    message = "Ocorreu um erro! Fale com o Administrador.", 
+                    success = false, 
+                    data = ex.Message
+                });
             }
         }
 
         [HttpGet]
-        [Route("all")]
-        public async Task<IResultCommand> GetAll()
+        [Route("all/{qtditems}/{page}")]
+        public async Task<IResultCommand> GetAll(int qtdItems, int page)
         {
             try
             {
-                var authors = await _repository.GetAll();
+                var authors = await _repository.GetAll(qtdItems, page);
                 return new ResultCommand()
                 {
                     Data = authors,
@@ -121,11 +109,8 @@ namespace bookLibrary.API.Controllers
         }
 
         [HttpGet]
-        [Route("id")]
-        public async Task<IResultCommand> GetById
-        (
-           [FromQuery] Guid id
-        )
+        [Route("")]
+        public async Task<IResultCommand> GetById([FromQuery] Guid id)
         {
             try
             {

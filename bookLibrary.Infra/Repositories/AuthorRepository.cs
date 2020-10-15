@@ -66,19 +66,51 @@ namespace bookLibrary.Infra.Repositories
 
         public async Task Delete(Guid id)
         {
-            // var author = await _context.Authors
-            //     .AsNoTracking()
-            //     .FirstOrDefaultAsync(AuthorQueries.GetById(id));
-            // _context.Remove(author);
-            // await _context.SaveChangesAsync();
+            try
+            {
+                string query = "DELETE FROM autor WHERE id = @id";
+
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter("id", id)
+                };
+
+                _contextAdo.ExecutarComando(CommandType.Text,query, parameters);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<Author>> GetAll()
+        public async Task<IEnumerable<Author>> GetAll(int qtdItems, int page)
         {
-            return new List<Author>();
-            // return await _context.Authors
-            //     .AsNoTracking()
-            //     .ToListAsync();
+            List<Author> lista = null;
+
+            string query =  "SELECT TOP (@qtdItems) id, nome " +
+                            "FROM (SELECT ROW_NUMBER() OVER(ORDER BY nome) AS linha, id, nome FROM autor WITH(NOLOCK)) as paginado " +
+                            "WHERE linha > @qtdItems * (@page - 1)";
+
+            var parameters = new SqlParameter[]
+            {
+                new SqlParameter("@qtdItems", qtdItems),
+                new SqlParameter("@page", page)
+            };
+
+            using (var result = _contextAdo.ExecutarConsulta(CommandType.Text, query, parameters))
+            {
+                lista = new List<Author>();
+
+                while (result.Read())
+                {
+                    var author = new Author(result[1].ToString());
+                    author.FillIdAuthor(result[0].ToString());
+
+                    lista.Add(author);
+                }
+            }
+
+            return lista;
         }
 
         public async Task<Author> GetById(Guid id)

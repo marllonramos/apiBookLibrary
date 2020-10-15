@@ -7,7 +7,7 @@ namespace bookLibrary.Domain.Repositories
 {
     public interface IAuthorRepository
     {
-        Task<IEnumerable<Author>> GetAll();
+        Task<IEnumerable<Author>> GetAll(int qtdItems, int page);
         Task<Author> GetById(Guid id);
         Task Create(Author author);
         Task Update(Author author);
