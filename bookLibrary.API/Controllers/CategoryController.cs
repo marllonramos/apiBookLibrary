@@ -14,11 +14,7 @@ namespace bookLibrary.API.Controllers
     {
         private readonly CategoryHandler _handler;
         private readonly ICategoryRepository _repository;
-        public CategoryController
-        (
-            CategoryHandler handler,
-            ICategoryRepository repository
-        )
+        public CategoryController(CategoryHandler handler, ICategoryRepository repository)
         {
             _handler = handler;
             _repository = repository;
@@ -26,121 +22,90 @@ namespace bookLibrary.API.Controllers
 
 
         [HttpPost]
-        public async Task<IResultCommand> Post
-        (
-            [FromBody] CreateCategoryCommand command
-        )
+        public async Task<ActionResult<IResultCommand>> Post([FromBody] CreateCategoryCommand command)
         {
             try
             {
-                return await _handler.Handler(command);
+                var result = await _handler.Handler(command);
+                if (result != null)
+                    return Ok(result);
+
+                return NotFound(result);
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IResultCommand> Put
-        (
-            [FromBody] UpdateCategoryCommand command
-        )
+        public async Task<ActionResult<IResultCommand>> Put([FromBody] UpdateCategoryCommand command)
         {
             try
             {
+                var result = await _handler.Handler(command);
+                if (result != null)
+                    return Ok(result);
 
-                return await _handler.Handler(command);
+                return NotFound(result);
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IResultCommand> Delete
-        (
-           Guid id
-        )
+        public async Task<ActionResult<IResultCommand>> Delete(Guid id)
         {
             try
             {
-                 await _repository.Delete(id);
-                return new ResultCommand()
-                {
-                    Message = "Categoria excluída com sucesso.",
-                    Success = true
-                };
+                await _repository.Delete(id);
+                return Ok(new { message = "Categoria excluída com sucesso.", success = true });
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
 
         [HttpGet]
-        [Route("all")]
-        public async Task<IResultCommand> GetAll()
+        [Route("all/{qtdItems}/{page}")]
+        public async Task<ActionResult<IResultCommand>> GetAll(int qtdItems, int page)
         {
             try
             {
-                var categories = await _repository.GetAll();
-                return new ResultCommand()
-                {
-                    Data = categories,
-                    Success = true
-                };
+                var categories = await _repository.GetAll(qtdItems, page);
+                if (categories != null)
+                    return Ok(new { Data = categories, Success = true });
+
+                return NotFound(new { message = "Nenhuma categoria encontrada!", success = false });
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
-            }                       
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
+            }
         }
 
         [HttpGet]
-        [Route("id")]
-        public async Task<IResultCommand> GetById
-        (
-            [FromQuery] Guid id
-        )
+        [Route("")]
+        public async Task<ActionResult<IResultCommand>> GetById([FromQuery] Guid id)
         {
             try
             {
                 var category = await _repository.GetById(id);
-                return new ResultCommand()
-                {
-                    Data = category,
-                    Success = true
-                };
+                if (category != null)
+                    return Ok(new { Data = category, Success = true });
+
+                return NotFound(new { message = "Nenhuma categoria encontrada!", success = false });
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
-            }            
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
+            }
         }
     }
 }
