@@ -98,7 +98,7 @@ namespace bookLibrary.API.Controllers
             {
                 var category = await _repository.GetById(id);
                 if (category != null)
-                    return Ok(new { Data = category, Success = true });
+                    return Ok(new { data = category, success = true });
 
                 return NotFound(new { message = "Nenhuma categoria encontrada!", success = false });
             }

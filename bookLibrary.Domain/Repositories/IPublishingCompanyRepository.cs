@@ -7,7 +7,7 @@ namespace bookLibrary.Domain.Repositories
 {
     public interface IPublishingCompanyRepository
     {
-        Task<IEnumerable<PublishingCompany>> GetAll();
+        Task<IEnumerable<PublishingCompany>> GetAll(int qtdItems, int page);
         Task<PublishingCompany> GetById(Guid id);
         Task Create(PublishingCompany publishingCompany);
         Task Update(PublishingCompany publishingCompany);

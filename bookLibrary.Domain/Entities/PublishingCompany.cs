@@ -1,14 +1,10 @@
-﻿using bookLibrary.Domain.Shared;
+﻿using System;
+using bookLibrary.Domain.Shared;
 
 namespace bookLibrary.Domain.Entities
 {
     public class PublishingCompany : Entity
     {
-        public PublishingCompany()
-        {
-
-        }
-
         public PublishingCompany(string name)
         {
             Name = name;
@@ -19,6 +15,11 @@ namespace bookLibrary.Domain.Entities
         public void Update(string name)
         {
             Name = name;
+        }
+
+        public void FillIdPublishingCompany(string id)
+        {
+            Id = Guid.Parse(id);
         }
     }
 }

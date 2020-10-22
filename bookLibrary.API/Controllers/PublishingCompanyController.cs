@@ -15,129 +15,95 @@ namespace bookLibrary.API.Controllers
         private readonly IPublishingCompanyRepository _repository;
         private readonly PublishingCompanyHandler _handler;
 
-        public PublishingCompanyController
-        (
-            IPublishingCompanyRepository repository, 
-            PublishingCompanyHandler handler
-        )
+        public PublishingCompanyController(IPublishingCompanyRepository repository, PublishingCompanyHandler handler)
         {
             _repository = repository;
             _handler = handler;
         }
 
         [HttpPost]
-        public async Task<IResultCommand> Post
-       (
-          [FromBody] CreatePublishingCompanyCommand command
-       )
+        public async Task<ActionResult<IResultCommand>> Post([FromBody] CreatePublishingCompanyCommand command)
         {
             try
             {
-                return await _handler.Handler(command);
+                ResultCommand result = (ResultCommand)await _handler.Handler(command);
+                if (result.Success)
+                    return Ok(result);
+
+                return BadRequest(result);
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
         [HttpPut]
-        public async Task<IResultCommand> Put
-        (
-            [FromBody] UpdatePublishingCompanyCommand command
-        )
+        public async Task<ActionResult<IResultCommand>> Put([FromBody] UpdatePublishingCompanyCommand command)
         {
             try
             {
-                return await _handler.Handler(command);
+                ResultCommand result = (ResultCommand)await _handler.Handler(command);
+                if (result.Success)
+                    return Ok(result);
+
+                return BadRequest(result);
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
 
         [HttpDelete]
         [Route("{id}")]
-        public async Task<IResultCommand> Delete
-        (
-            Guid id
-        )
+        public async Task<ActionResult<IResultCommand>> Delete(Guid id)
         {
             try
             {
                 await _repository.Delete(id);
-                return new ResultCommand()
-                {
-                    Message = "Editora excluída com sucesso.",
-                    Success = true
-                };
+                return Ok(new { message = "Editora excluída com sucesso.", success = true });
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
         [HttpGet]
-        [Route("all")]
-        public async Task<IResultCommand> GetAll()
+        [Route("all/{qtdItems}/{page}")]
+        public async Task<ActionResult<IResultCommand>> GetAll(int qtdItems, int page)
         {
             try
             {
-                var publishingCompanies = await _repository.GetAll();
-                return new ResultCommand()
-                {
-                    Data = publishingCompanies,
-                    Success = true
-                };
+                var publishingCompanies = await _repository.GetAll(qtdItems, page);
+                if (publishingCompanies != null)
+                    return Ok(new { success = true, data = publishingCompanies });
+
+                return NotFound(new { message = "Nenhuma editora encontrada!", success = false });
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
 
         [HttpGet]
-        [Route("id")]
-        public async Task<IResultCommand> GetById
-        (
-            [FromQuery] Guid id
-        )
+        [Route("")]
+        public async Task<ActionResult<IResultCommand>> GetByI([FromQuery] Guid id)
         {
             try
             {
                 var publishingCompany = await _repository.GetById(id);
-                return new ResultCommand()
-                {
-                    Data = publishingCompany,
-                    Success = true
-                };
+                if (publishingCompany != null)
+                    return Ok(new { success = true, data = publishingCompany });
+
+                return NotFound(new { message = "Nenhuma editora encontrada!", success = false });
             }
             catch (Exception ex)
             {
-                return new ResultCommand()
-                {
-                    Message = ex.Message,
-                    Success = false
-                };
+                return BadRequest(new { message = "Ocorreu um erro! Fale com o Administrador.", success = false, data = ex.Message });
             }
         }
     }
