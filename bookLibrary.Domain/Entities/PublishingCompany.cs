@@ -5,12 +5,12 @@ namespace bookLibrary.Domain.Entities
 {
     public class PublishingCompany : Entity
     {
+        public string Name { get; private set; }
+
         public PublishingCompany(string name)
         {
             Name = name;
         }
-
-        public string Name { get; private set; }
 
         public void Update(string name)
         {
