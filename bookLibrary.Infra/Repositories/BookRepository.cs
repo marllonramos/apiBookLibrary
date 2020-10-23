@@ -40,13 +40,13 @@ namespace bookLibrary.Infra.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Book>> GetBookByReader(Guid id)
-        {
-            return await _context.Books
-                .Where(BookQueries.GetBookByReader(id))
-                .AsNoTracking()
-                .ToListAsync();
-        }
+        // public async Task<IEnumerable<Book>> GetBookByReader(Guid id)
+        // {
+        //     return await _context.Books
+        //         .Where(BookQueries.GetBookByReader(id))
+        //         .AsNoTracking()
+        //         .ToListAsync();
+        // }
 
         public async Task<IEnumerable<Book>> GetBookByAuthor(Guid id)
         {

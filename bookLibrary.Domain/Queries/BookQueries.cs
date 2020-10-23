@@ -6,11 +6,6 @@ namespace bookLibrary.Domain.Queries
 {
     public static class BookQueries
     {
-        public static Expression<Func<Book, bool>> GetBookByReader(Guid id)
-        {
-            return x => x.Reader.Id == id;
-        }
-
         public static Expression<Func<Book, bool>> GetBookByAuthor(Guid id)
         {
             return x => x.Author.Id == id;

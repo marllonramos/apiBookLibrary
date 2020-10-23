@@ -1,21 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
 using bookLibrary.Domain.Enums;
 using bookLibrary.Domain.Shared;
-using System;
 
 namespace bookLibrary.Domain.Entities
 {
     public sealed class Book : Entity
     {
-        public Book(string title, string description, PublishingCompany publishingCompany, Author author, Category category, Reader reader)
-        {
-            Title = title;
-            Description = description;
-            Status = StatusBook.QueroComprar;
-            PublishingCompany = publishingCompany;
-            Author = author;
-            Category = category;
-            Reader = reader;
-        }
+        private IList<Exemplary> _exemplaries;
 
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -23,8 +15,24 @@ namespace bookLibrary.Domain.Entities
         public PublishingCompany PublishingCompany { get; private set; }
         public Author Author { get; private set; }
         public Category Category { get; private set; }
-        public Guid ReaderId { get; private set; }
-        public Reader Reader { get; private set; }
+        public IEnumerable<Exemplary> Exemplaries { get { return _exemplaries.ToList(); } }
+
+        public Book(string title, string description, PublishingCompany publishingCompany, Author author, Category category)
+        {
+            Title = title;
+            Description = description;
+            Status = StatusBook.Ativo;
+            PublishingCompany = publishingCompany;
+            Author = author;
+            Category = category;
+            _exemplaries = new List<Exemplary>();
+        }
+
+        public void AddExemplaryOfTheBook(Book book)
+        {
+            foreach (var exemplary in book.Exemplaries)
+                _exemplaries.Add(exemplary);
+        }
 
         public void UpdateTitle(string title)
         {

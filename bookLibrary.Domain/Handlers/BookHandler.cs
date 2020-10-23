@@ -37,10 +37,10 @@ namespace bookLibrary.Domain.Handlers
             Category category = await _categoryRepository.GetById(command.CategoryId);
             Reader reader = await _readerRepository.GetReader(command.ReaderId);
 
-            Book book = new Book(command.Title, command.Description, company, author, category, reader);
+            Book book = new Book(command.Title, command.Description, company, author, category);
 
-            // Caso tivéssemos regras de negócio na entidade BOOK, teríamos a validação lá e aqui 
-            // pegaríamos as notificações e atribuiríamos ao Handler
+            // Caso tivï¿½ssemos regras de negï¿½cio na entidade BOOK, terï¿½amos a validaï¿½ï¿½o lï¿½ e aqui 
+            // pegarï¿½amos as notificaï¿½ï¿½es e atribuirï¿½amos ao Handler
             //AddNotifications(book.Notifications);
             //if (Invalid)
             //    return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = Notifications };
@@ -69,8 +69,8 @@ namespace bookLibrary.Domain.Handlers
             book.UpdatePublishingCompany(company);
             book.UpdateCategory(category);
 
-            // Caso tivéssemos regras de negócio na entidade BOOK, teríamos a validação lá e aqui 
-            // pegaríamos as notificações e atribuiríamos ao Handler
+            // Caso tivï¿½ssemos regras de negï¿½cio na entidade BOOK, terï¿½amos a validaï¿½ï¿½o lï¿½ e aqui 
+            // pegarï¿½amos as notificaï¿½ï¿½es e atribuirï¿½amos ao Handler
             //AddNotifications(book.Notification);
             //if (Invalid)
             //    return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = Notifications };
