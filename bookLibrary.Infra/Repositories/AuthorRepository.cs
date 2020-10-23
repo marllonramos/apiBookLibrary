@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using bookLibrary.Domain.Entities;
-using bookLibrary.Domain.Queries;
 using bookLibrary.Domain.Repositories;
 using bookLibrary.Infra.Contexts;
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 
 namespace bookLibrary.Infra.Repositories
 {
@@ -28,7 +26,7 @@ namespace bookLibrary.Infra.Repositories
         {
             try
             {
-                string query = "INSERT INTO autor(id, nome) VALUES(@id, @nome)";
+                string query = "INSERT INTO autores(id, nome) VALUES(@id, @nome)";
 
                 var parameters = new SqlParameter[]
                 {
@@ -48,7 +46,7 @@ namespace bookLibrary.Infra.Repositories
         {
             try
             {
-                string query = "UPDATE autor SET nome = @nome WHERE ID = @id";
+                string query = "UPDATE autores SET nome = @nome WHERE ID = @id";
 
                 var parameters = new SqlParameter[]
                 {
@@ -68,7 +66,7 @@ namespace bookLibrary.Infra.Repositories
         {
             try
             {
-                string query = "DELETE FROM autor WHERE id = @id";
+                string query = "DELETE FROM autores WHERE id = @id";
 
                 var parameters = new SqlParameter[]
                 {
@@ -88,7 +86,7 @@ namespace bookLibrary.Infra.Repositories
             List<Author> lista = null;
 
             string query =  "SELECT TOP (@qtdItems) id, nome " +
-                            "FROM (SELECT ROW_NUMBER() OVER(ORDER BY nome) AS linha, id, nome FROM autor WITH(NOLOCK)) as paginado " +
+                            "FROM (SELECT ROW_NUMBER() OVER(ORDER BY nome) AS linha, id, nome FROM autores WITH(NOLOCK)) as paginado " +
                             "WHERE linha > @qtdItems * (@page - 1)";
 
             var parameters = new SqlParameter[]
@@ -119,7 +117,7 @@ namespace bookLibrary.Infra.Repositories
             {
                 Author author = null;
 
-                string query = "SELECT id, nome FROM autor WHERE Id = @id";
+                string query = "SELECT id, nome FROM autores WHERE Id = @id";
 
                 var parameters = new SqlParameter[]
                 {
