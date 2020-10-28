@@ -5,6 +5,7 @@ namespace bookLibrary.Domain.Enums
         QueroComprar = 1,
         FilaDeLeitura = 2,
         Lendo = 3,
-        Lido = 4
+        Lido = 4,
+        LeituraPausada = 5
     }
 }

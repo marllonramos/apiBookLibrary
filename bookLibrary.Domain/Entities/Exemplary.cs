@@ -19,7 +19,7 @@ namespace bookLibrary.Domain.Entities
         {
             Book = book;
             Reader = reader;
-            Status = StatusExemplary.FilaDeLeitura;
+            Status = StatusExemplary.QueroComprar;
             StartDateReading = null;
             EndDateReading = null;
             LastDateParalisation = null;
@@ -28,8 +28,41 @@ namespace bookLibrary.Domain.Entities
             AddNotifications(book, reader);
         }
 
-        public void UpdateEndDateReading(DateTime endDate)
+        public void StartReading()
         {
+            AddNotifications(new Contract()
+                .Requires()
+                .IsNullOrNullable(EndDateReading, "EndDateReading", "Não se pode iniciar uma leitura quando a data fim já foi informada.")
+            );
+
+            if (Invalid)
+                return;
+
+            StartDateReading = DateTime.Now;
+            Status = StatusExemplary.Lendo;
+        }
+
+        public void FinishReading()
+        {
+            var finishDate = DateTime.Now;
+
+            AddNotifications(new Contract()
+                .Requires()
+                .IsNotNull(StartDateReading, "StartDateReading", "Para finalizar uma leitura, é preciso iniciá-la.")
+                .IsGreaterOrEqualsThan(finishDate, StartDateReading.Value, "EndDateReading", "Data fim da leitura não pode ser menor que a data de início da leitura.")
+            );
+
+            if (Invalid)
+                return;
+
+            EndDateReading = finishDate;
+            Status = StatusExemplary.Lido;
+        }
+
+        public void UpdateEndDateReading()
+        {
+            var endDate = DateTime.Now;
+
             AddNotifications(new Contract()
                 .Requires()
                 .IsGreaterOrEqualsThan(endDate, StartDateReading.Value, "EndDateReading", "Data fim da leitura não pode ser menor que a data de início da leitura.")
@@ -39,10 +72,13 @@ namespace bookLibrary.Domain.Entities
                 return;
 
             EndDateReading = endDate;
+            Status = StatusExemplary.Lido;
         }
 
-        public void UpdateStartDateReading(DateTime startDate)
+        public void UpdateStartDateReading()
         {
+            var startDate = DateTime.Now;
+
             AddNotifications(new Contract()
                 .Requires()
                 .IsLowerOrEqualsThan(startDate, EndDateReading.Value, "StartDateReading", "Data início da leitura não pode ser maior que a data fim da leitura.")
@@ -52,6 +88,7 @@ namespace bookLibrary.Domain.Entities
                 return;
 
             StartDateReading = startDate;
+            Status = StatusExemplary.Lendo;
         }
 
         public void AddParalisation()
@@ -59,14 +96,27 @@ namespace bookLibrary.Domain.Entities
             AddNotifications(new Contract()
                 .Requires()
                 .IsNotNullOrEmpty(StartDateReading.Value.ToString(), "StartDateReading", "A leitura não pode ser paralisada, pois nem iniciada foi.")
-                .IsNullOrEmpty(EndDateReading.Value.ToString(), "EndDateReading", "A leitura não pode ser paralisada, pois o livro já foi lido.")
+                .IsNullOrNullable(EndDateReading, "EndDateReading", "A leitura não pode ser paralisada, pois o livro já foi lido.")
             );
 
             if (Invalid)
                 return;
 
             LastDateParalisation = DateTime.Now;
+            Status = StatusExemplary.LeituraPausada;
             Paralisation += 1;
         }
+
+        // public void AlterStatus(StatusExemplary status)
+        // {
+        //     AddNotifications(new Contract()
+        //         .Requires()
+        //         .IsTrue()
+        //         .IsNullOrNullable(StartDateReading, "StartDateReading", "")
+        //     );
+        //     Status = status;
+        // }
+
+        // private bool IsStatusReading
     }
 }
