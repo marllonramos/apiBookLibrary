@@ -70,7 +70,7 @@ namespace bookLibrary.Infra.Repositories
 
                 var parameters = new SqlParameter[]
                 {
-                    new SqlParameter("id", id)
+                    new SqlParameter("@id", id)
                 };
 
                 _contextAdo.ExecutarComando(CommandType.Text,query, parameters);

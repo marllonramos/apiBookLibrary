@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using bookLibrary.Domain.Enums;
@@ -7,31 +8,26 @@ namespace bookLibrary.Domain.Entities
 {
     public sealed class Book : Entity
     {
-        private IList<Exemplary> _exemplaries;
-
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public StatusBook Status { get; private set; }
+        public EStatusBook Status { get; private set; }
         public PublishingCompany PublishingCompany { get; private set; }
         public Author Author { get; private set; }
         public Category Category { get; private set; }
-        public IEnumerable<Exemplary> Exemplaries { get { return _exemplaries.ToList(); } }
 
         public Book(string title, string description, PublishingCompany publishingCompany, Author author, Category category)
         {
             Title = title;
             Description = description;
-            Status = StatusBook.Ativo;
+            Status = EStatusBook.Ativo;
             PublishingCompany = publishingCompany;
             Author = author;
             Category = category;
-            _exemplaries = new List<Exemplary>();
         }
 
-        public void AddExemplaryOfTheBook(Book book)
+        public void FillIdBook(string id)
         {
-            foreach (var exemplary in book.Exemplaries)
-                _exemplaries.Add(exemplary);
+            Id = Guid.Parse(id);
         }
 
         public void UpdateTitle(string title)
@@ -42,7 +38,7 @@ namespace bookLibrary.Domain.Entities
         {
             Description = description;
         }
-        public void UpdateStatus(StatusBook status)
+        public void UpdateStatus(EStatusBook status)
         {
             Status = status;
         }

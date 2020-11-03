@@ -14,15 +14,13 @@ namespace bookLibrary.Domain.Handlers
         private readonly IPublishingCompanyRepository _publishingCompanyRepository;
         private readonly IAuthorRepository _authorRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IReaderRepository _readerRepository;
 
-        public BookHandler(IBookRepository bookRepository, IPublishingCompanyRepository publishingCompanyRepository, IAuthorRepository authorRepository, ICategoryRepository categoryRepository, IReaderRepository readerRepository)
+        public BookHandler(IBookRepository bookRepository, IPublishingCompanyRepository publishingCompanyRepository, IAuthorRepository authorRepository, ICategoryRepository categoryRepository)
         {
             _bookRepository = bookRepository;
             _publishingCompanyRepository = publishingCompanyRepository;
             _authorRepository = authorRepository;
             _categoryRepository = categoryRepository;
-            _readerRepository = readerRepository;
         }
 
         public async Task<IResultCommand> Handler(CreateBookCommand command)
@@ -35,7 +33,6 @@ namespace bookLibrary.Domain.Handlers
             PublishingCompany company = await _publishingCompanyRepository.GetById(command.PublishingCompanyId);
             Author author = await _authorRepository.GetById(command.AuthorId);
             Category category = await _categoryRepository.GetById(command.CategoryId);
-            Reader reader = await _readerRepository.GetReader(command.ReaderId);
 
             Book book = new Book(command.Title, command.Description, company, author, category);
 
@@ -64,7 +61,7 @@ namespace bookLibrary.Domain.Handlers
 
             book.UpdateTitle(command.Title);
             book.UpdateDescription(command.Description);
-            book.UpdateStatus((StatusBook)command.Status);
+            book.UpdateStatus((EStatusBook)command.Status);
             book.UpdateAuthor(author);
             book.UpdatePublishingCompany(company);
             book.UpdateCategory(category);

@@ -11,20 +11,18 @@ namespace bookLibrary.Domain.Commands.BookCommands
         public Guid PublishingCompanyId { get; set; }
         public Guid AuthorId { get; set; }
         public Guid CategoryId { get; set; }
-        public Guid ReaderId { get; set; }
 
         public void Validate()
         {
             AddNotifications(new Contract()
                 .Requires()
-                .IsNotNullOrEmpty(Title, "Title", "Informe o nome do leitor.")
-                .HasMinLen(Title, 3, "Title", "Informe um mínimo de 3 caracteres e um máximo de 50 para o livro.")
-                .HasMaxLen(Title, 50, "Title", "Informe um mínimo de 3 caracteres e um máximo de 50 para o livro.")
-                .HasMaxLen(Description, 250, "Description", "Informe no máximo 250 caracteres para a descrição.")
+                .IsNotNullOrEmpty(Title, "Title", "Informe o tÃ­tulo.")
+                .HasMinLen(Title, 3, "Title", "Informe um mï¿½nimo de 3 caracteres e um mï¿½ximo de 50 para o tÃ­tulo.")
+                .HasMaxLen(Title, 50, "Title", "Informe um mï¿½nimo de 3 caracteres e um mï¿½ximo de 50 para o tÃ­tulo.")
+                .HasMaxLen(Description, 250, "Description", "Informe no mï¿½ximo 250 caracteres para a descriï¿½ï¿½o.")
                 .IsNotNullOrEmpty(PublishingCompanyId.ToString(), "PublishingCompanyId", "Informe uma editora.")
                 .IsNotNullOrEmpty(AuthorId.ToString(), "AuthorId", "Informe um autor.")
                 .IsNotNullOrEmpty(CategoryId.ToString(), "CategoryId", "Informe uma categoria.")
-                .IsNotNullOrEmpty(ReaderId.ToString(), "ReaderId", "Informe um leitor.")
             );
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace bookLibrary.Domain.Enums
 {
-    public enum StatusBook
+    public enum EStatusBook
     {
         Inativo = 0,
         Ativo = 1
