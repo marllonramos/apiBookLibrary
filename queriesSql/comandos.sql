@@ -40,3 +40,11 @@ FROM livros li INNER JOIN editoras edi
     INNER JOIN autores aut
     ON li.autorId = aut.Id
     WHERE aut.Id = 'DF19D5F2-4F6C-47C4-A3A1-F1FAE5FC817F'
+
+
+create table leitor(
+	Id uniqueidentifier not null,
+	Nome varchar(120) not null,
+	Email varchar(60) not null,
+	Password varchar(60) not null
+);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using bookLibrary.Domain.Shared;
@@ -54,6 +55,11 @@ namespace bookLibrary.Domain.Entities
         public void UpdatePassword(string password)
         {
             Password = password;
+        }
+
+        public void FillReaderId(Guid id)
+        {
+            Id = id;
         }
     }
 }

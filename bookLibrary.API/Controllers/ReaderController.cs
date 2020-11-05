@@ -51,7 +51,7 @@ namespace bookLibrary.API.Controllers
         }
 
         [HttpGet]
-        [Route("by-id/{id:Guid}")]
+        [Route("{id:Guid}")]
         public async Task<IResultCommand> Get(Guid id)
         {
             try
