@@ -48,3 +48,14 @@ create table leitor(
 	Email varchar(60) not null,
 	Password varchar(60) not null
 );
+
+create table exemplares(
+	Id uniqueidentifier not null,
+	IdLeitor uniqueidentifier not null,
+	IdLivro uniqueidentifier not null,
+	Status int not null,
+	InicioDataLeitura datetime null,
+	FimDataLeitura datetime null,
+	UltimaDataParalisacao datetime null,
+	Paralisacao int not null
+);

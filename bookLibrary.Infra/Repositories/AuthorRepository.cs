@@ -11,12 +11,8 @@ namespace bookLibrary.Infra.Repositories
 {
     public class AuthorRepository : IAuthorRepository
     {
-        // private readonly DbBookContext _context;
         private readonly DbSqlAdoContext _contextAdo;
-        // public AuthorRepository(DbBookContext context)
-        // {
-        //     _context = context;
-        // }
+
         public AuthorRepository(DbSqlAdoContext context)
         {
             _contextAdo = context;

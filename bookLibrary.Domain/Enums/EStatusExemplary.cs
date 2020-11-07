@@ -1,6 +1,6 @@
 namespace bookLibrary.Domain.Enums
 {
-    public enum StatusExemplary
+    public enum EStatusExemplary
     {
         QueroComprar = 1,
         FilaDeLeitura = 2,

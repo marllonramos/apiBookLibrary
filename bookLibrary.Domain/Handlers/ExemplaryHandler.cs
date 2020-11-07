@@ -11,7 +11,9 @@ namespace bookLibrary.Domain.Handlers
     IHandler<CreateExemplaryCommand>, 
     IHandler<StartReadingCommand>, 
     IHandler<FinishReadingCommand>, 
-    IHandler<PauseReadingCommand>
+    IHandler<PauseReadingCommand>,
+    IHandler<RestartReadingCommand>,
+    IHandler<PutInReadingQueueCommand>
     {
         private readonly IExemplaryRepository _exemplaryRepository;
         
@@ -26,6 +28,11 @@ namespace bookLibrary.Domain.Handlers
 
             if(command.Invalid)
                 return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
+
+            var exemplaryOfBookAndReader = await _exemplaryRepository.GetExemplaryByBookAndReader(command.IdBook,command.IdReader);
+
+            if(!(exemplaryOfBookAndReader is null))
+                return new ResultCommand { Message = "Um exemplar desse cliente com esse livro já existe.", Success = false, Data = command.Notifications };
 
             var exemplary = new Exemplary(command.IdBook, command.IdReader);
 
@@ -89,6 +96,42 @@ namespace bookLibrary.Domain.Handlers
             await _exemplaryRepository.UpdateExemplary(exemplary);
 
             return new ResultCommand { Message = "Leitura pausada com sucesso!", Success = true, Data = exemplary };
+        }
+
+        public async Task<IResultCommand> Handler(RestartReadingCommand command)
+        {
+            command.Validate();
+            if(command.Invalid)
+                return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
+
+            var exemplary = await _exemplaryRepository.GetExemplary(command.Id);
+
+            exemplary.RestartReading();
+
+            if(exemplary.Invalid)
+                return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = exemplary.Notifications };
+            
+            await _exemplaryRepository.UpdateExemplary(exemplary);
+
+            return new ResultCommand { Message = "Leitura reiniciada com sucesso!", Success = true, Data = exemplary };
+        }
+
+        public async Task<IResultCommand> Handler(PutInReadingQueueCommand command)
+        {
+            command.Validate();
+            if(command.Invalid)
+                return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
+
+            var exemplary = await _exemplaryRepository.GetExemplary(command.Id);
+
+            exemplary.PutInReadingQueue();
+
+            if(exemplary.Invalid)
+                return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = exemplary.Notifications };
+            
+            await _exemplaryRepository.UpdateExemplary(exemplary);
+
+            return new ResultCommand { Message = "Livro colocado na fila de leitura com sucesso!", Success = true, Data = exemplary };            
         }
     }
 }
