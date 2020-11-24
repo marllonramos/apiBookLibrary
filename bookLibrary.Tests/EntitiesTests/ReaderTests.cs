@@ -1,5 +1,6 @@
 ﻿using bookLibrary.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace bookLibrary.Tests.EntitiesTests
 {
@@ -13,10 +14,10 @@ namespace bookLibrary.Tests.EntitiesTests
         public ReaderTests()
         {
             // TODO: alterar para uma consulta no FakeRepositorio
-            _readerEmailExists = new Reader("Marllon Ramos", "87marllon@gmail.com", "123456");
+            _readerEmailExists = new Reader("Marllon Ramos", "87marllon@gmail.com", "123456", Guid.Parse("6B9632FC-9EB6-454D-82B3-B801C4AFB837"));
 
             // TODO: alterar para uma consulta no FakeRepositorio
-            _readerEmailNotExists = new Reader("", "", "");
+            _readerEmailNotExists = new Reader("", "", "", Guid.Empty);
         }
     
         [TestMethod]

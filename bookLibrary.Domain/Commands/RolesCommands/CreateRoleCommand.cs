@@ -6,7 +6,7 @@ namespace bookLibrary.Domain.Commands.RolesCommands
     public class CreateRoleCommand : Notifiable, IValidatable, ICommand
     {
         public string Name { get; set; }
-        public int Priority { get; private set; }
+        public int Priority { get; set; }
 
         public void Validate()
         {

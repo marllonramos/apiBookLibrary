@@ -1,5 +1,6 @@
 using Flunt.Notifications;
 using Flunt.Validations;
+using System;
 
 namespace bookLibrary.Domain.Commands.ReaderCommands
 {
@@ -9,6 +10,7 @@ namespace bookLibrary.Domain.Commands.ReaderCommands
         public string Email { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+        public Guid IdRole { get; set; }
 
         public void Validate()
         {
@@ -23,6 +25,7 @@ namespace bookLibrary.Domain.Commands.ReaderCommands
                 .HasMinLen(Password, 4, "Password", "Informe um mínimo de 4 caracteres e um máximo de 8 para a senha.")
                 .HasMaxLen(Password, 8, "Password", "Informe um mínimo de 4 caracteres e um máximo de 8 para a senha.")
                 .AreEquals(Password, ConfirmPassword, "Confirm Password", "Senhas não conferem.")
+                .IsNotNullOrEmpty(IdRole.ToString(), "IdReader", "Informe o perfil do usuário.")
             );
         }
     }

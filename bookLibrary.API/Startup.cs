@@ -40,12 +40,14 @@ namespace bookLibrary.API
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IAuthorRepository, AuthorRepository>();
             services.AddScoped<IExemplaryRepository, ExemplaryRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
             services.AddScoped<BookHandler, BookHandler>();
             services.AddScoped<ReaderHandler, ReaderHandler>();
             services.AddScoped<CategoryHandler, CategoryHandler>();
             services.AddScoped<AuthorHandler, AuthorHandler>();
             services.AddScoped<PublishingCompanyHandler, PublishingCompanyHandler>();
             services.AddScoped<ExemplaryHandler, ExemplaryHandler>();
+            services.AddScoped<RoleHandler, RoleHandler>();
             services.AddScoped<DbSqlAdoContext, DbSqlAdoContext>();
 
             //6. Conexao com SqlServer(usando para Entity Framework)

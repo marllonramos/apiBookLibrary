@@ -9,6 +9,7 @@ namespace bookLibrary.Domain.Commands.ReaderCommands
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+        public Guid IdRole { get; set; }
 
         public void Validate()
         {
@@ -21,6 +22,7 @@ namespace bookLibrary.Domain.Commands.ReaderCommands
                 .IsNotNullOrEmpty(Password, "Password", "Informe sua senha.")
                 .HasMinLen(Password, 4, "Password", "Informe um mínimo de 4 caracteres e um máximo de 8 para a senha.")
                 .HasMaxLen(Password, 8, "Password", "Informe um mínimo de 4 caracteres e um máximo de 8 para a senha.")
+                .IsNotNullOrEmpty(IdRole.ToString(), "IdReader", "Informe o perfil do usuário.")
             );
         }
     }

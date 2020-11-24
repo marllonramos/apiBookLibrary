@@ -14,13 +14,21 @@ namespace bookLibrary.Domain.Entities
         public string Email { get; private set; }
         public string Password { get; private set; }
         public IEnumerable<Exemplary> Exemplaries { get { return _exemplaries.ToList(); } }
+        public Guid RoleId { get; private set; }
+        public Role Role { get; private set; }
 
-        public Reader(string name, string email, string password)
+        public Reader(string name, string email, string password, Guid roleId)
         {
             Name = name;
             Email = email;
             Password = password;
             _exemplaries = new List<Exemplary>();
+            RoleId = roleId;
+        }
+
+        public void AddRole(Role role)
+        {
+            Role = role;
         }
 
         public void AddExemplary(Exemplary exemplary)
@@ -55,6 +63,11 @@ namespace bookLibrary.Domain.Entities
         public void UpdatePassword(string password)
         {
             Password = password;
+        }
+
+        public void UpdateRole(Guid idRole)
+        {
+            RoleId = idRole;
         }
 
         public void FillReaderId(Guid id)

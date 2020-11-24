@@ -21,15 +21,16 @@ namespace bookLibrary.Infra.Repositories
         {
             try
             {
-                string query = @"INSERT INTO leitor(id, nome, email, password) 
-                                    VALUES(@id, @nome, @email, @password)";
+                string query = @"INSERT INTO leitores(id, nome, email, password, idperfil) 
+                                    VALUES(@id, @nome, @email, @password, @perfil)";
 
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@id", reader.Id),
                     new SqlParameter("@nome", reader.Name),
                     new SqlParameter("@email", reader.Email),
-                    new SqlParameter("@password", reader.Password)
+                    new SqlParameter("@password", reader.Password),
+                    new SqlParameter("@perfil", reader.RoleId)
                 };
 
                 _context.ExecutarComando(CommandType.Text, query, parameters);                
@@ -44,14 +45,15 @@ namespace bookLibrary.Infra.Repositories
         {
             try
             {
-                string query = @"UPDATE leitor SET nome = @nome, password = @password
+                string query = @"UPDATE leitores SET nome = @nome, password = @password, idperfil = @perfil 
                                     WHERE id = @id";
 
                 var parameters = new SqlParameter[]
                 {
                     new SqlParameter("@id", reader.Id),
                     new SqlParameter("@nome", reader.Name),
-                    new SqlParameter("@password", reader.Password)
+                    new SqlParameter("@password", reader.Password),
+                    new SqlParameter("@perfil", reader.RoleId)
                 };
 
                 _context.ExecutarComando(CommandType.Text, query, parameters);                
@@ -66,7 +68,7 @@ namespace bookLibrary.Infra.Repositories
         {
             try
             {
-                string query = @"DELETE FROM leitor WHERE id = @id";
+                string query = @"DELETE FROM leitores WHERE id = @id";
 
                 var parameters = new SqlParameter[]
                 {
@@ -85,8 +87,11 @@ namespace bookLibrary.Infra.Repositories
         {
             try
             {
-                string query = @"SELECT nome, email, password 
-                                    FROM leitor WHERE id = @id";
+                string query = @"SELECT lei.nome, lei.email, lei.password, lei.idperfil, perf.nome nomePerfil, perf.prioridade
+                                    FROM leitores lei
+                                    INNER JOIN perfis perf
+                                    ON lei.IdPerfil = perf.Id
+                                    WHERE lei.id = @id";
 
                 var parameters = new SqlParameter[]
                 {
@@ -94,13 +99,19 @@ namespace bookLibrary.Infra.Repositories
                 };
 
                 Reader reader = null;
+                Role role = null;
 
                 using (SqlDataReader dr = _context.ExecutarConsulta(CommandType.Text, query, parameters))
                 {
                     while (dr.Read())
                     {
-                        reader = new Reader(dr["nome"].ToString(), dr["email"].ToString(), dr["password"].ToString());
+                        reader = new Reader(dr["nome"].ToString(), dr["email"].ToString(), dr["password"].ToString(), Guid.Parse(dr["idperfil"].ToString()));
                         reader.FillReaderId(id);
+
+                        role = new Role(dr["nomePerfil"].ToString(), int.Parse(dr["prioridade"].ToString()));
+                        role.FillRoleId(Guid.Parse(dr["idperfil"].ToString()));
+
+                        reader.AddRole(role);
                     }
                 }
 

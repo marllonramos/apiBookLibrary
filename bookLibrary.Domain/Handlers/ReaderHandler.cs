@@ -23,7 +23,7 @@ namespace bookLibrary.Domain.Handlers
             if(command.Invalid)
                 return new ResultCommand { Message = "Ops! Deu erro.", Success = false, Data = command.Notifications };
 
-            Reader reader = new Reader(command.Name, command.Email, command.Password);
+            Reader reader = new Reader(command.Name, command.Email, command.Password, command.IdRole);
 
             await _readerRepository.CreateReader(reader);
 
@@ -41,6 +41,7 @@ namespace bookLibrary.Domain.Handlers
 
             reader.UpdateName(command.Name);
             reader.UpdatePassword(command.Password);
+            reader.UpdateRole(command.IdRole);
 
             await _readerRepository.UpdateReader(reader);
 
