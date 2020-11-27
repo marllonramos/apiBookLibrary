@@ -4,12 +4,19 @@ using bookLibrary.Domain.Repositories;
 using bookLibrary.Domain.Shared;
 using bookLibrary.Infra.Contexts;
 using bookLibrary.Infra.Repositories;
+using bookLibrary.Infra.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace bookLibrary.API
 {
@@ -27,10 +34,18 @@ namespace bookLibrary.API
             //1. Cors adicionado
             services.AddCors();
 
+            services.AddMvc(config =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                                    .RequireAuthenticatedUser()
+                                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            }).SetCompatibilityVersion(CompatibilityVersion.Latest);
+
             services.AddControllers();
-          
-           //2. Conexão com 'InMemory'                     
-           //services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
+
+            //2. Conexão com 'InMemory'                     
+            //services.AddDbContext<DbBookContext>(opt => opt.UseInMemoryDatabase("dbBook"));
 
             //5. Adicionando injeção de dependência
             services.AddScoped<IResultCommand, ResultCommand>();
@@ -49,6 +64,7 @@ namespace bookLibrary.API
             services.AddScoped<ExemplaryHandler, ExemplaryHandler>();
             services.AddScoped<RoleHandler, RoleHandler>();
             services.AddScoped<DbSqlAdoContext, DbSqlAdoContext>();
+            services.AddScoped<TokenService, TokenService>();
 
             //6. Conexao com SqlServer(usando para Entity Framework)
             services.AddDbContext<DbBookContext>(
@@ -58,6 +74,26 @@ namespace bookLibrary.API
 
             //6. Conexao com SqlServer(usando para ADO.Net)
             Settings.ConnectionString = Configuration.GetConnectionString("connectionString");
+
+            // Configure Authentication JWT
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("SecretKey").Value);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -78,9 +114,9 @@ namespace bookLibrary.API
                 .AllowAnyHeader()
             );
 
-            app.UseAuthorization();
             //4. Habilitei o uso da autorização
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

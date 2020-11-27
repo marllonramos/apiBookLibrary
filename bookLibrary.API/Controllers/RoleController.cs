@@ -2,6 +2,7 @@ using bookLibrary.Domain.Commands;
 using bookLibrary.Domain.Commands.RolesCommands;
 using bookLibrary.Domain.Handlers;
 using bookLibrary.Domain.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(Roles= "Gestor")]
         public async Task<ActionResult<IResultCommand>> Post([FromBody] CreateRoleCommand command)
         {
             try
