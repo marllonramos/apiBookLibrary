@@ -6,6 +6,7 @@ using bookLibrary.Domain.Commands.BookCommands;
 using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Handlers;
 using bookLibrary.Domain.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bookLibrary.API.Controllers
@@ -25,6 +26,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> Post([FromBody] CreateBookCommand command)
         {
             try
@@ -39,6 +41,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> Put([FromBody] UpdateBookCommand command)
         {
             try
@@ -53,6 +56,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> Delete(Guid id)
         {
             try
@@ -68,6 +72,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> GetBook(Guid id)
         {
             try
@@ -83,6 +88,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("by-author/{id:Guid}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> GetByAuthor(Guid id)
         {
             try
@@ -98,6 +104,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("by-category/{id:Guid}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> GetByCategory(Guid id)
         {
             try
@@ -113,6 +120,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("by-publishing/{id:Guid}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> GetByPublishing(Guid id)
         {
             try

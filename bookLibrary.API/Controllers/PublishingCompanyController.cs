@@ -2,6 +2,7 @@
 using bookLibrary.Domain.Commands.PublishingCompanyCommands;
 using bookLibrary.Domain.Handlers;
 using bookLibrary.Domain.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace bookLibrary.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<IResultCommand>> Post([FromBody] CreatePublishingCompanyCommand command)
         {
             try
@@ -39,6 +41,7 @@ namespace bookLibrary.API.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<IResultCommand>> Put([FromBody] UpdatePublishingCompanyCommand command)
         {
             try
@@ -58,6 +61,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<IResultCommand>> Delete(Guid id)
         {
             try
@@ -73,6 +77,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("all/{qtdItems}/{page}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<ActionResult<IResultCommand>> GetAll(int qtdItems, int page)
         {
             try
@@ -91,6 +96,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<ActionResult<IResultCommand>> GetByI([FromQuery] Guid id)
         {
             try

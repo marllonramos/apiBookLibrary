@@ -3,6 +3,7 @@ using bookLibrary.Domain.Commands.ReaderCommands;
 using bookLibrary.Domain.Entities;
 using bookLibrary.Domain.Handlers;
 using bookLibrary.Domain.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPost]
         [Route("")]
+        [AllowAnonymous]
         public async Task<IResultCommand> Post([FromBody]CreateReaderCommand command)
         {
             try
@@ -38,6 +40,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("")]
+        [Authorize(Roles="Leitor, Administrador")]
         public async Task<IResultCommand> Put([FromBody]UpdateReaderCommand command)
         {
             try
@@ -52,6 +55,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> Get(Guid id)
         {
             try
@@ -67,6 +71,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> Delete(Guid id)
         {
             try

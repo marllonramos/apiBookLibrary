@@ -4,6 +4,7 @@ using bookLibrary.Domain.Commands;
 using bookLibrary.Domain.Commands.ExemplaryCommands;
 using bookLibrary.Domain.Handlers;
 using bookLibrary.Domain.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bookLibrary.API.Controllers
@@ -23,6 +24,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPost]
         [Route("")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> Post([FromBody] CreateExemplaryCommand command)
         {
             try
@@ -37,6 +39,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("start")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> StartReading([FromBody] StartReadingCommand command)
         {
             try
@@ -51,6 +54,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("pause")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> PauseReading([FromBody]PauseReadingCommand command)
         {
             try
@@ -65,6 +69,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("restart")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> RestartReading([FromBody]RestartReadingCommand command)
         {
             try
@@ -79,6 +84,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("finish")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> FinishReading([FromBody]FinishReadingCommand command)
         {
             try
@@ -93,6 +99,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("reading-in-queue")]
+        [Authorize(Roles = "Leitor, Administrador")]
         public async Task<IResultCommand> ReadingInQueue([FromBody]PutInReadingQueueCommand command)
         {
             try

@@ -25,7 +25,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPost]
         [Route("")]
-        [Authorize(Roles= "Gestor")]
+        [Authorize(Roles= "Administrador")]
         public async Task<ActionResult<IResultCommand>> Post([FromBody] CreateRoleCommand command)
         {
             try
@@ -44,6 +44,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpPut]
         [Route("")]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<IResultCommand>> Put([FromBody] UpdatePriorityRoleCommand command)
         {
             try
@@ -62,6 +63,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<IResultCommand>> Delete(Guid id)
         {
             try
@@ -82,6 +84,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("")]
+        [Authorize(Roles = "Administrador, Leitor")]
         public async Task<ActionResult<IResultCommand>> GetById([FromQuery] Guid id)
         {
             try
@@ -105,6 +108,7 @@ namespace bookLibrary.API.Controllers
 
         [HttpGet]
         [Route("all")]
+        [Authorize(Roles = "Administrador")]
         public async Task<ActionResult<IResultCommand>> GetAll()
         {
             try
